@@ -23,12 +23,12 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Welcome to Web3</title>
+        <title>Welcome to the Art Portal 🎨</title>
         <meta name="description" content="Welcome to Web3" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <header sx={{ margin: '1rem 0' }}>
-        <h1 sx={{ fontFamily: 'heading' }}>
+        <h1 sx={{ fontFamily: 'heading', margin: '1rem' }}>
           Welcome to the <span sx={web3Styles}>art portal 🎨</span>
         </h1>
       </header>
