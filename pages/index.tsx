@@ -43,6 +43,45 @@ const web3Styles = {
   },
 };
 
+type MiningStatus =
+  | {
+      state: 'mining' | 'mined';
+      transactionHash: string;
+    }
+  | { state: 'none' };
+
+function getMiningStyles(miningStatus: MiningStatus) {
+  switch (miningStatus.state) {
+    case 'mining':
+      return {
+        ...web3Styles,
+        marginRight: '0.5rem',
+      };
+    case 'mined': {
+      return {
+        marginRight: '0.5rem',
+      };
+    }
+    case 'none': {
+      return { display: 'none' };
+    }
+  }
+}
+
+function getMiningMessage(miningStatus: MiningStatus) {
+  const { state } = miningStatus;
+
+  switch (state) {
+    case 'mining':
+      return `Mining transaction ${miningStatus.transactionHash}`;
+    case 'mined': {
+      return `${miningStatus.transactionHash} transaction has been mined`;
+    }
+    case 'none':
+      '';
+  }
+}
+
 const Home: NextPage = () => {
   const [artRequestCount, setArtRequestCount] = useState(0);
   const [currentAccount, setCurrentAccount] = useState('');
@@ -50,6 +89,9 @@ const Home: NextPage = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [message, setMessage] = useState('');
   const [artRequests, setAllArtRequests] = useState([]);
+  const [miningStatus, setMiningStatus] = useState<MiningStatus>({
+    state: 'none',
+  });
 
   /*
    * Create a method that gets all waves from your contract
@@ -138,21 +180,19 @@ const Home: NextPage = () => {
 
       if (ethereum) {
         const wavePortalContract = getContract(ethereum);
-        let count = getLatestArtRequestsCount(wavePortalContract);
-        console.log('Retrieved total art requests...', count);
 
         /*
          * Execute the actual wave from your smart contract
          */
         const waveTxn = await wavePortalContract.askForArt(message);
-        console.log('Mining...', waveTxn.hash);
+        setMiningStatus({ state: 'mining', transactionHash: waveTxn.hash });
 
         await waveTxn.wait();
-        console.log('Mined -- ', waveTxn.hash);
-
+        setMiningStatus({ state: 'mined', transactionHash: waveTxn.hash });
+        setTimeout(() => {
+          setMiningStatus({ state: 'none' });
+        }, 3000);
         getArtRequests();
-        count = getLatestArtRequestsCount(wavePortalContract);
-        console.log('Retrieved total art requests...', count);
       } else {
         setError('You need the MetaMask browser extension!');
       }
@@ -307,6 +347,14 @@ const Home: NextPage = () => {
         {successMessage && (
           <p aria-live="polite" sx={{ color: 'darkgreen', fontWeight: 700 }}>
             {successMessage}
+          </p>
+        )}
+        {miningStatus.state !== 'none' && (
+          <p aria-live="polite" sx={{ color: 'darkgreen', fontWeight: 700 }}>
+            <span aria-hidden="true" sx={getMiningStyles(miningStatus)}>
+              💎
+            </span>
+            {getMiningMessage(miningStatus)}
           </p>
         )}
 
