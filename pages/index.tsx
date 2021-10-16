@@ -180,7 +180,13 @@ const Home: NextPage = () => {
           <em>Hi! 👋</em> I&apos;m Nick. Connect your Metamask Ethereum wallet
           and request some art!
         </p>
-        <div sx={{ display: 'flex', alignItems: 'flex-start' }}>
+        <div
+          sx={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            marginBottom: '1rem',
+          }}
+        >
           <button sx={{ marginRight: '1rem' }} onClick={requestArt}>
             Request a piece of art!
           </button>
