@@ -29,13 +29,14 @@ const web3Styles = {
 
 const Home: NextPage = () => {
   const [currentAccount, setCurrentAccount] = useState('');
+  const [error, setError] = useState('');
 
   async function requestArt() {
     try {
       const { ethereum } = window;
 
       if (!ethereum) {
-        alert('Get MetaMask!');
+        setError('You need the MetaMask browser extension!');
         return;
       }
 
@@ -45,8 +46,20 @@ const Home: NextPage = () => {
 
       console.log('Connected', accounts[0]);
       setCurrentAccount(accounts[0]);
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+
+      if (
+        error.message.includes(
+          `Request of type 'wallet_requestPermissions' already pending`,
+        )
+      ) {
+        setError(
+          `You've already requested to connect your Metamask wallet. Click on the Metamask wallet extension to bring it back to focus so you can connect your wallet.`,
+        );
+      } else {
+        setError('An unknown error occurred');
+      }
     }
   }
 
@@ -104,6 +117,11 @@ const Home: NextPage = () => {
         </p>
 
         <button onClick={requestArt}>Request a piece of art!</button>
+        {error && (
+          <p aria-live="assertive" sx={{ color: 'darkred', fontWeight: 700 }}>
+            {error}
+          </p>
+        )}
       </main>
     </>
   );
