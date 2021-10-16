@@ -318,27 +318,24 @@ const Home: NextPage = () => {
               overflowY: 'scroll',
               height: '60vh',
               padding: '1rem',
+              '& li': {
+                borderRadius: '0.5rem',
+                backgroundImage: `linear-gradient(to right top, #d8ff10, #ffb900, #ff5843, #ff0099, #c312eb)`,
+                padding: '1rem',
+              },
+              '& [data-list-item-wrapper]': {
+                fontWeight: 500,
+                padding: '1rem',
+                background: '#000',
+                color: '#fff',
+                borderRadius: '0.5rem',
+              },
             }}
           >
             {artRequests.map((artRequest: any, index) => {
               return (
-                <li
-                  key={index}
-                  style={{
-                    borderRadius: '0.5rem',
-                    backgroundImage: `linear-gradient(to right top, #d8ff10, #ffb900, #ff5843, #ff0099, #c312eb)`,
-                    padding: '1rem',
-                  }}
-                >
-                  <div
-                    sx={{
-                      fontWeight: 500,
-                      padding: '1rem',
-                      background: '#000',
-                      color: '#fff',
-                      borderRadius: '0.5rem',
-                    }}
-                  >
+                <li key={index}>
+                  <div data-list-item-wrapper={true}>
                     <div>Address: {artRequest.address}</div>
                     <time dateTime={artRequest.timestamp.toString()}>
                       {artRequest.timestamp.toString()}
