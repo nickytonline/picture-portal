@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { keyframes } from '@emotion/react';
 import { useEffect, useState } from 'react';
+import { ErrorDescription } from '@ethersproject/abi/lib/interface';
 
 // Extend the window object.
 declare global {
@@ -57,6 +58,8 @@ const Home: NextPage = () => {
         setError(
           `You've already requested to connect your Metamask wallet. Click on the Metamask wallet extension to bring it back to focus so you can connect your wallet.`,
         );
+      } else if (error.message.includes(`User rejected the request.`)) {
+        setError(`That's so sad. You decided to not connect your wallet. 😭`);
       } else {
         setError('An unknown error occurred');
       }
