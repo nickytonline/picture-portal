@@ -99,8 +99,8 @@ const Home: NextPage = () => {
       </header>
       <main>
         <p>
-          <em>Hi! 👋</em> I&apos;m Nick. Connect your Ethereum wallet and
-          request some art!
+          <em>Hi! 👋</em> I&apos;m Nick. Connect your Metamask Ethereum wallet
+          and request some art!
         </p>
 
         <button onClick={requestArt}>Request a piece of art!</button>
