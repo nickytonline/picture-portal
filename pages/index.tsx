@@ -2,7 +2,6 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { keyframes } from '@emotion/react';
 import { useEffect, useState } from 'react';
-import { ErrorDescription } from '@ethersproject/abi/lib/interface';
 
 // Extend the window object.
 declare global {
@@ -31,8 +30,11 @@ const web3Styles = {
 const Home: NextPage = () => {
   const [currentAccount, setCurrentAccount] = useState('');
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
-  async function requestArt() {
+  async function requestArt() {}
+
+  async function connectWallet() {
     try {
       const { ethereum } = window;
 
@@ -45,8 +47,12 @@ const Home: NextPage = () => {
         method: 'eth_requestAccounts',
       });
 
-      console.log('Connected', accounts[0]);
       setCurrentAccount(accounts[0]);
+      setError('');
+      setSuccessMessage(`Wallet ${accounts[0]} has been connected`);
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 3000);
     } catch (error: any) {
       console.log(error);
 
@@ -118,11 +124,20 @@ const Home: NextPage = () => {
           <em>Hi! 👋</em> I&apos;m Nick. Connect your Metamask Ethereum wallet
           and request some art!
         </p>
-
-        <button onClick={requestArt}>Request a piece of art!</button>
+        <div sx={{ display: 'flex', alignItems: 'flex-start' }}>
+          <button sx={{ marginRight: '1rem' }} onClick={requestArt}>
+            Request a piece of art!
+          </button>
+          <button onClick={connectWallet}>Connect Wallet</button>
+        </div>
         {error && (
           <p aria-live="assertive" sx={{ color: 'darkred', fontWeight: 700 }}>
             {error}
+          </p>
+        )}
+        {successMessage && (
+          <p aria-live="polite" sx={{ color: 'darkgreen', fontWeight: 700 }}>
+            {successMessage}
           </p>
         )}
       </main>
