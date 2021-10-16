@@ -1,6 +1,7 @@
-# Web3 Starter
+# Wave Portal
 
-The goal of this project is to give you an opinionated boilerplate to start a web3 project.
+A project to learn about web3 following a Buildspace walkthrough. The initial
+code is based off of my starter, https://github.com/nickytonline/web3-starter.
 
 ## Contributing
 
