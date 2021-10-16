@@ -293,7 +293,7 @@ const Home: NextPage = () => {
               onChange={(e) => setMessage(e.target.value)}
             />
             <button sx={{ marginRight: '1rem' }} onClick={requestArt}>
-              Request a piece of art!
+              Request to view some art!
             </button>
           </form>
           <button onClick={connectWallet}>Connect Wallet</button>
