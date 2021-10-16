@@ -23,7 +23,7 @@ declare global {
   }
 }
 
-const contractAddress = '0x1Fc6A9415A3cAd6e16D5d9277300FA667506d03E';
+const contractAddress = '0xc9632fc4B6D01A82781B19b197e05dfdc98912Cf';
 const contractABI = abi.abi;
 
 const fadeInfadeOut = keyframes`

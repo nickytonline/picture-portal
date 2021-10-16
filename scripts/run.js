@@ -1,19 +1,27 @@
 const main = async () => {
-  const [owner, randomPerson] = await hre.ethers.getSigners();
   const waveContractFactory = await hre.ethers.getContractFactory('WavePortal');
   const waveContract = await waveContractFactory.deploy();
   await waveContract.deployed();
-
-  console.log('Contract deployed to:', waveContract.address);
-  console.log('Contract deployed by:', owner.address);
+  console.log('Contract addy:', waveContract.address);
 
   let artRequestsCount;
   artRequestsCount = await waveContract.getTotalArtRequests();
+  console.log(artRequestsCount.toNumber());
 
-  let waveTxn = await waveContract.askForArt();
-  await waveTxn.wait();
+  /**
+   * Let's send a few waves!
+   */
+  let waveTxn = await waveContract.askForArt('A message!');
+  await waveTxn.wait(); // Wait for the transaction to be mined
 
-  artRequestsCount = await waveContract.getTotalArtRequests();
+  const [_, randomPerson] = await hre.ethers.getSigners();
+  waveTxn = await waveContract
+    .connect(randomPerson)
+    .askForArt('Another message!');
+  await waveTxn.wait(); // Wait for the transaction to be mined
+
+  let allArtRequests = await waveContract.getArtRequests();
+  console.log(allArtRequests);
 };
 
 const runMain = async () => {
