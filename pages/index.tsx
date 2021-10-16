@@ -127,6 +127,9 @@ const Home: NextPage = () => {
 
     if (!message || message.length === 0) {
       setError('You need to specify a message before requesting to view art');
+      setTimeout(() => {
+        setError('');
+      }, 3000);
       return;
     }
 
