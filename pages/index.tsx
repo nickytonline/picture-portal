@@ -48,6 +48,53 @@ const Home: NextPage = () => {
   const [currentAccount, setCurrentAccount] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [message, setMessage] = useState('');
+  const [artRequests, setAllArtRequests] = useState([]);
+
+  /*
+   * Create a method that gets all waves from your contract
+   */
+  async function getArtRequests() {
+    try {
+      const { ethereum } = window;
+
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const wavePortalContract = new ethers.Contract(
+          contractAddress,
+          contractABI,
+          signer,
+        );
+
+        /*
+         * Call the getArtRequests method from your Smart Contract
+         */
+        const rawArtRequests = await wavePortalContract.getArtRequests();
+
+        /*
+         * We only need address, timestamp, and message in our UI so let's
+         * pick those out
+         */
+        const artRequests = rawArtRequests.map((artRequest: any) => {
+          return {
+            address: artRequest.waver,
+            timestamp: new Date(artRequest.timestamp * 1000),
+            message: artRequest.message,
+          };
+        });
+
+        /*
+         * Store our data in React State
+         */
+        setAllArtRequests(artRequests);
+      } else {
+        console.log("Ethereum object doesn't exist!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   function intializeErrorMessaging() {
     setError('');
@@ -73,8 +120,15 @@ const Home: NextPage = () => {
     return count;
   }
 
-  async function requestArt() {
+  async function requestArt(event: any) {
+    event.preventDefault;
+
     intializeErrorMessaging();
+
+    if (!message || message.length === 0) {
+      setError('You need to specify a message before requesting to view art');
+      return;
+    }
 
     try {
       const { ethereum } = window;
@@ -87,7 +141,7 @@ const Home: NextPage = () => {
         /*
          * Execute the actual wave from your smart contract
          */
-        const waveTxn = await wavePortalContract.askForArt();
+        const waveTxn = await wavePortalContract.askForArt(message);
         console.log('Mining...', waveTxn.hash);
 
         await waveTxn.wait();
@@ -184,9 +238,11 @@ const Home: NextPage = () => {
    * This runs our function when the page loads.
    */
   useEffect(() => {
+    // TODO: Stuff in here will error out if the wallet isn't connected
     checkIfWalletIsConnected();
     const contract = getContract(window.ethereum);
     getLatestArtRequestsCount(contract);
+    getArtRequests();
   }, []);
 
   return (
@@ -222,9 +278,21 @@ const Home: NextPage = () => {
             marginBottom: '1rem',
           }}
         >
-          <button sx={{ marginRight: '1rem' }} onClick={requestArt}>
-            Request a piece of art!
-          </button>
+          <form
+            onSubmit={(event) => {
+              event?.preventDefault();
+            }}
+          >
+            <input
+              required={true}
+              type="text"
+              placeholder="Message"
+              onChange={(e) => setMessage(e.target.value)}
+            />
+            <button sx={{ marginRight: '1rem' }} onClick={requestArt}>
+              Request a piece of art!
+            </button>
+          </form>
           <button onClick={connectWallet}>Connect Wallet</button>
         </div>
         {error && (
@@ -236,6 +304,39 @@ const Home: NextPage = () => {
           <p aria-live="polite" sx={{ color: 'darkgreen', fontWeight: 700 }}>
             {successMessage}
           </p>
+        )}
+
+        {artRequests.length > 0 && (
+          <ul sx={{ listStyle: 'none' }}>
+            {artRequests.map((artRequest: any, index) => {
+              return (
+                <li
+                  key={index}
+                  style={{
+                    borderRadius: '0.5rem',
+                    backgroundImage: `linear-gradient(to right top, #d8ff10, #ffb900, #ff5843, #ff0099, #c312eb)`,
+                    padding: '1rem',
+                  }}
+                >
+                  <div
+                    sx={{
+                      fontWeight: 500,
+                      padding: '1rem',
+                      background: '#000',
+                      color: '#fff',
+                      borderRadius: '0.5rem',
+                    }}
+                  >
+                    <div>Address: {artRequest.address}</div>
+                    <time dateTime={artRequest.timestamp.toString()}>
+                      {artRequest.timestamp.toString()}
+                    </time>
+                    <div>Message: {artRequest.message}</div>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         )}
       </main>
     </>
