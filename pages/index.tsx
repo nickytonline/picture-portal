@@ -37,7 +37,14 @@ const Home: NextPage = () => {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
+  function intializeErrorMessaging() {
+    setError('');
+    setSuccessMessage('');
+  }
+
   async function requestArt() {
+    intializeErrorMessaging();
+
     try {
       const { ethereum } = window;
 
@@ -67,12 +74,23 @@ const Home: NextPage = () => {
       } else {
         setError('You need the MetaMask browser extension!');
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (
+        error.message.includes(
+          `MetaMask Tx Signature: User denied transaction signature.`,
+        )
+      ) {
+        setError('You changed your mind and did not request art.');
+      } else {
+        setError('an unknown error occurred');
+        console.log(error);
+      }
     }
   }
 
   async function connectWallet() {
+    intializeErrorMessaging();
+
     try {
       const { ethereum } = window;
 
