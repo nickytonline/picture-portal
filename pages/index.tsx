@@ -150,6 +150,7 @@ const Home: NextPage = () => {
         await waveTxn.wait();
         console.log('Mined -- ', waveTxn.hash);
 
+        getArtRequests();
         count = getLatestArtRequestsCount(wavePortalContract);
         console.log('Retrieved total art requests...', count);
       } else {
@@ -310,7 +311,15 @@ const Home: NextPage = () => {
         )}
 
         {artRequests.length > 0 && (
-          <ul sx={{ listStyle: 'none' }}>
+          <ul
+            sx={{
+              listStyle: 'none',
+              overflowX: 'hidden',
+              overflowY: 'scroll',
+              height: '60vh',
+              padding: '1rem',
+            }}
+          >
             {artRequests.map((artRequest: any, index) => {
               return (
                 <li
