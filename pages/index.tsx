@@ -29,7 +29,7 @@ const Home: NextPage = () => {
       </Head>
       <header sx={{ margin: '1rem 0' }}>
         <h1 sx={{ fontFamily: 'heading' }}>
-          Welcome to <span sx={web3Styles}>web3</span>
+          Welcome to the <span sx={web3Styles}>art portal 🎨</span>
         </h1>
       </header>
       <main>
