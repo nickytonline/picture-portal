@@ -187,6 +187,8 @@ const Home: NextPage = () => {
         const waveTxn = await wavePortalContract.askForArt(message);
         setMiningStatus({ state: 'mining', transactionHash: waveTxn.hash });
 
+        setMessage('');
+
         await waveTxn.wait();
         setMiningStatus({ state: 'mined', transactionHash: waveTxn.hash });
         setTimeout(() => {
@@ -330,6 +332,7 @@ const Home: NextPage = () => {
             <input
               required={true}
               type="text"
+              value={message}
               placeholder="Message"
               onChange={(e) => setMessage(e.target.value)}
             />
