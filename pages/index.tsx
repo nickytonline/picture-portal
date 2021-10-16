@@ -213,7 +213,7 @@ const Home: NextPage = () => {
       <main>
         <p>
           <em>Hi! 👋</em> I&apos;m Nick. Connect your Metamask Ethereum wallet
-          and request some art!
+          and request to see some art! (not purchase an NFT)
         </p>
         <div
           sx={{
