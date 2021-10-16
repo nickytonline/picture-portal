@@ -2,6 +2,8 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { keyframes } from '@emotion/react';
 import { useEffect, useState } from 'react';
+import { ethers } from 'ethers';
+import abi from '../utils/WavePortal.json';
 
 // Extend the window object.
 declare global {
@@ -9,6 +11,9 @@ declare global {
     ethereum: any; // TODO, type this out at some point.
   }
 }
+
+const contractAddress = '0x1Fc6A9415A3cAd6e16D5d9277300FA667506d03E';
+const contractABI = abi.abi;
 
 const fadeInfadeOut = keyframes`
   from {
@@ -32,7 +37,40 @@ const Home: NextPage = () => {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-  async function requestArt() {}
+  async function requestArt() {
+    try {
+      const { ethereum } = window;
+
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const wavePortalContract = new ethers.Contract(
+          contractAddress,
+          contractABI,
+          signer,
+        );
+
+        let count = await wavePortalContract.getTotalArtRequests();
+        console.log('Retrieved total art requests...', count.toNumber());
+
+        /*
+         * Execute the actual wave from your smart contract
+         */
+        const waveTxn = await wavePortalContract.askForArt();
+        console.log('Mining...', waveTxn.hash);
+
+        await waveTxn.wait();
+        console.log('Mined -- ', waveTxn.hash);
+
+        count = await wavePortalContract.getTotalArtRequests();
+        console.log('Retrieved total art requests...', count.toNumber());
+      } else {
+        setError('You need the MetaMask browser extension!');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   async function connectWallet() {
     try {
