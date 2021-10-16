@@ -33,6 +33,7 @@ const web3Styles = {
 };
 
 const Home: NextPage = () => {
+  const [artRequestCount, setArtRequestCount] = useState(0);
   const [currentAccount, setCurrentAccount] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -42,6 +43,25 @@ const Home: NextPage = () => {
     setSuccessMessage('');
   }
 
+  function getContract(ethereum) {
+    const provider = new ethers.providers.Web3Provider(ethereum);
+    const signer = provider.getSigner();
+    const wavePortalContract = new ethers.Contract(
+      contractAddress,
+      contractABI,
+      signer,
+    );
+
+    return wavePortalContract;
+  }
+
+  async function getLatestArtRequestsCount(contract: any) {
+    const count = (await contract.getTotalArtRequests()).toNumber();
+    setArtRequestCount(count);
+
+    return count;
+  }
+
   async function requestArt() {
     intializeErrorMessaging();
 
@@ -49,16 +69,9 @@ const Home: NextPage = () => {
       const { ethereum } = window;
 
       if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        const wavePortalContract = new ethers.Contract(
-          contractAddress,
-          contractABI,
-          signer,
-        );
-
-        let count = await wavePortalContract.getTotalArtRequests();
-        console.log('Retrieved total art requests...', count.toNumber());
+        const wavePortalContract = getContract(ethereum);
+        let count = getLatestArtRequestsCount(wavePortalContract);
+        console.log('Retrieved total art requests...', count);
 
         /*
          * Execute the actual wave from your smart contract
@@ -69,8 +82,8 @@ const Home: NextPage = () => {
         await waveTxn.wait();
         console.log('Mined -- ', waveTxn.hash);
 
-        count = await wavePortalContract.getTotalArtRequests();
-        console.log('Retrieved total art requests...', count.toNumber());
+        count = getLatestArtRequestsCount(wavePortalContract);
+        console.log('Retrieved total art requests...', count);
       } else {
         setError('You need the MetaMask browser extension!');
       }
@@ -161,6 +174,8 @@ const Home: NextPage = () => {
    */
   useEffect(() => {
     checkIfWalletIsConnected();
+    const contract = getContract(window.ethereum);
+    getLatestArtRequestsCount(contract);
   }, []);
 
   return (
@@ -171,6 +186,15 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <header sx={{ margin: '1rem 0' }}>
+        <marquee
+          sx={{
+            fontSize: '2rem',
+            background: '#000',
+            color: 'lime',
+          }}
+        >
+          {artRequestCount} art requests! 💥
+        </marquee>
         <h1 sx={{ fontFamily: 'heading' }}>
           Welcome to the <span sx={web3Styles}>art portal 🎨</span>
         </h1>
