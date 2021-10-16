@@ -1,4 +1,4 @@
-# Wave Portal
+# Art Portal
 
 A project to learn about web3 following a Buildspace walkthrough. The initial
 code is based off of my starter, https://github.com/nickytonline/web3-starter.
