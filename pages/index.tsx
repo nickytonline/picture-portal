@@ -5,6 +5,17 @@ import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import abi from '../utils/WavePortal.json';
 
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      marquee: React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLMarqueeElement>,
+        HTMLMarqueeElement
+      >;
+    }
+  }
+}
+
 // Extend the window object.
 declare global {
   interface Window {
