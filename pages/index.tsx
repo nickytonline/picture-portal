@@ -321,6 +321,7 @@ const Home: NextPage = () => {
       });
 
       setCurrentAccount(accounts[0]);
+      getArtRequests();
       setError('');
       setSuccessMessage(`Wallet ${accounts[0]} has been connected`);
       setTimeout(() => {
@@ -345,14 +346,8 @@ const Home: NextPage = () => {
     }
   }
 
-  const checkIfWalletIsConnected = async () => {
+  const checkIfWalletIsConnected = async (ethereum: any) => {
     try {
-      const { ethereum } = window;
-
-      if (!ethereum) {
-        return false;
-      }
-
       /*
        * Check if we're authorized to access the user's wallet
        */
@@ -363,10 +358,10 @@ const Home: NextPage = () => {
         console.log('Found an authorized account:', account);
         setCurrentAccount(account);
       } else {
-        console.log('No authorized account found');
+        setError(
+          'No authorized account found. Connect your account in your Metamask wallet.',
+        );
       }
-
-      return true;
     } catch (error) {
       console.log(error);
     }
@@ -376,15 +371,15 @@ const Home: NextPage = () => {
    * This runs our function when the page loads.
    */
   useEffect(() => {
-    (async () => {
-      // TODO: Stuff in here will error out if the wallet isn't connected
-      if (await checkIfWalletIsConnected()) {
-        const contract = getContract(window.ethereum);
-        getArtRequests();
-      } else {
-        setError(MISSING_METAMASK_MESSAGE);
-      }
-    })();
+    const { ethereum } = window;
+
+    if (!ethereum) {
+      setError(MISSING_METAMASK_MESSAGE);
+      return;
+    }
+
+    checkIfWalletIsConnected(ethereum);
+    getArtRequests();
   }, []);
 
   return (
