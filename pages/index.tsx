@@ -270,9 +270,11 @@ const Home: NextPage = () => {
       if (ethereum) {
         const wavePortalContract = getContract(ethereum);
 
-        const imageUrl = `https://http.cat/${Math.floor(
-          Math.random() * httpStatusCodes.length,
-        )}`;
+        const imageUrl = `https://http.cat/${
+          httpStatusCodes[
+            Math.floor(Math.random() * httpStatusCodes.length - 1)
+          ]
+        }`;
 
         /*
          * Execute the actual wave from your smart contract
