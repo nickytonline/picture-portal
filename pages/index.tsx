@@ -457,6 +457,12 @@ const Home: NextPage = () => {
           )}
         </div>
         <div sx={{ height: '2rem' }}>
+          {newMessage && (
+            <div aria-live="polite" sx={{ fontWeight: 700 }}>
+              <span sx={{ marginRight: '0.5rem' }}>{newMessage}</span>
+              <button onClick={scrollToLastMessage}>Go to new message</button>
+            </div>
+          )}
           {error && (
             <p aria-live="assertive" sx={{ color: 'darkred', fontWeight: 700 }}>
               {error}
@@ -465,17 +471,6 @@ const Home: NextPage = () => {
           {successMessage && (
             <p aria-live="polite" sx={{ color: 'darkgreen', fontWeight: 700 }}>
               {successMessage}
-            </p>
-          )}
-          {newMessage && (
-            <p aria-live="polite" sx={{ fontWeight: 700 }}>
-              Go to new message:{' '}
-              <a
-                href={`#message${artRequests.length - 1}`}
-                sx={{ color: 'accent' }}
-              >
-                {newMessage}
-              </a>
             </p>
           )}
           {miningStatus.state !== 'none' && (
