@@ -11,7 +11,12 @@ contract WavePortal {
     /*
      * A little magic, Google what events are in Solidity!
      */
-    event NewWave(address indexed from, uint256 timestamp, string message);
+    event NewWave(
+        address indexed from,
+        uint256 timestamp,
+        string message,
+        string imageUrl
+    );
 
     /*
      * I created a struct here named Wave.
@@ -21,6 +26,7 @@ contract WavePortal {
         address waver; // The address of the user who waved.
         string message; // The message the user sent.
         uint256 timestamp; // The timestamp when the user waved.
+        string imageUrl; // The image URL they got.
     }
 
     /*
@@ -44,7 +50,7 @@ contract WavePortal {
      * now it requires a string called _message. This is the message our user
      * sends us from the frontend!
      */
-    function askForArt(string memory _message) public {
+    function askForArt(string memory _message, string memory _imageUrl) public {
         /*
          * We need to make sure the current timestamp is at least 15-minutes bigger than the last timestamp we stored
          */
@@ -64,7 +70,7 @@ contract WavePortal {
         /*
          * This is where I actually store the wave data in the array.
          */
-        waves.push(Wave(msg.sender, _message, block.timestamp));
+        waves.push(Wave(msg.sender, _message, block.timestamp, _imageUrl));
 
         /*
          * Generate a Psuedo random number between 0 and 100
@@ -97,7 +103,7 @@ contract WavePortal {
          * I added some fanciness here, Google it and try to figure out what it is!
          * Let me know what you learn in #general-chill-chat
          */
-        emit NewWave(msg.sender, block.timestamp, _message);
+        emit NewWave(msg.sender, block.timestamp, _message, _imageUrl);
     }
 
     /*

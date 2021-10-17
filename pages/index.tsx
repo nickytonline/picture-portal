@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import Image from 'next/image';
 import Head from 'next/head';
 import { keyframes } from '@emotion/react';
 import { useEffect, useState } from 'react';
@@ -23,7 +24,7 @@ declare global {
   }
 }
 
-const contractAddress = '0x1D4077F990ba4A56E09EEd3da6edfE2AF7177B92';
+const contractAddress = '0xD0F1A318b25149093bb1C8568B392970cA184631';
 const contractABI = abi.abi;
 
 const fadeInfadeOut = keyframes`
@@ -123,6 +124,7 @@ const Home: NextPage = () => {
             address: artRequest.waver,
             timestamp: new Date(artRequest.timestamp * 1000),
             message: artRequest.message,
+            imageUrl: artRequest.imageUrl,
           };
         });
 
@@ -181,10 +183,14 @@ const Home: NextPage = () => {
       if (ethereum) {
         const wavePortalContract = getContract(ethereum);
 
+        const imageUrl = `https://http.cat/${
+          Math.floor(Math.random() * 599) + 99
+        }`;
+
         /*
          * Execute the actual wave from your smart contract
          */
-        const waveTxn = await wavePortalContract.askForArt(message);
+        const waveTxn = await wavePortalContract.askForArt(message, imageUrl);
         setMiningStatus({ state: 'mining', transactionHash: waveTxn.hash });
 
         await waveTxn.wait();
@@ -379,6 +385,8 @@ const Home: NextPage = () => {
                 padding: '1rem',
               },
               '& [data-list-item-wrapper]': {
+                display: 'flex',
+                flexDirection: 'column',
                 fontWeight: 500,
                 padding: '1rem',
                 background: '#000',
@@ -396,6 +404,12 @@ const Home: NextPage = () => {
                       {artRequest.timestamp.toString()}
                     </time>
                     <div>Message: {artRequest.message}</div>
+                    <Image
+                      src={artRequest.imageUrl}
+                      alt="Art for this request"
+                      width="375"
+                      height="300"
+                    />
                   </div>
                 </li>
               );

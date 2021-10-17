@@ -17,10 +17,16 @@ const main = async () => {
   /*
    * Let's try two waves now
    */
-  const waveTxn = await waveContract.askForArt('This is wave #1');
+  const waveTxn = await waveContract.askForArt(
+    'This is wave #1',
+    'http://yolo.com/some-image.jpg',
+  );
   await waveTxn.wait();
 
-  const waveTxn2 = await waveContract.askForArt('This is wave #2');
+  const waveTxn2 = await waveContract.askForArt(
+    'This is wave #2',
+    'http://yolo.com/some-image.jpg',
+  );
   await waveTxn2.wait();
 
   contractBalance = await hre.ethers.provider.getBalance(waveContract.address);
