@@ -433,9 +433,23 @@ const Home: NextPage = () => {
             marginBottom: '1rem',
           }}
         >
-          <p sx={{ color: 'accent', fontWeight: 500 }}>
-            Connected account: {currentAccount || 'disconnected'}
-          </p>
+          <div sx={{ margin: '1rem 0' }}>
+            <span
+              sx={{
+                background: '#000',
+                color: 'lime',
+                fontWeight: 500,
+                padding: '0.5rem',
+                borderRadius: '0.5rem',
+                marginRight: '0.5rem',
+              }}
+            >
+              Connected account: {currentAccount || 'disconnected'}
+            </span>
+            {!currentAccount && (
+              <button onClick={connectWallet}>Connect Wallet</button>
+            )}
+          </div>
           <form
             onSubmit={(event) => {
               event?.preventDefault();
@@ -452,9 +466,6 @@ const Home: NextPage = () => {
               Request to view a picture!
             </button>
           </form>
-          {!currentAccount && (
-            <button onClick={connectWallet}>Connect Wallet</button>
-          )}
         </div>
         <div sx={{ height: '2rem' }}>
           {newMessage && (
