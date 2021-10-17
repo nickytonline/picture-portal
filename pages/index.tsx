@@ -520,7 +520,7 @@ const Home: NextPage = () => {
                   : {};
               return (
                 <li key={index}>
-                  <details open={index === items.length - 1}>
+                  <details>
                     <summary sx={{ userSelect: 'none' }} {...otherProps}>
                       {artRequest.message}
                     </summary>
