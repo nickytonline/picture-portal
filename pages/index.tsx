@@ -187,13 +187,8 @@ const Home: NextPage = () => {
         const waveTxn = await wavePortalContract.askForArt(message);
         setMiningStatus({ state: 'mining', transactionHash: waveTxn.hash });
 
-        setMessage('');
-
         await waveTxn.wait();
         setMiningStatus({ state: 'mined', transactionHash: waveTxn.hash });
-        setTimeout(() => {
-          setMiningStatus({ state: 'none' });
-        }, 3000);
         getArtRequests();
       } else {
         setError('You need the MetaMask browser extension!');
@@ -213,6 +208,11 @@ const Home: NextPage = () => {
         setError('an unknown error occurred');
         console.log(error);
       }
+    } finally {
+      setTimeout(() => {
+        setMiningStatus({ state: 'none' });
+      }, 3000);
+      setMessage('');
     }
   }
 
