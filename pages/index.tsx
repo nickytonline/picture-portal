@@ -89,7 +89,7 @@ const Home: NextPage = () => {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [message, setMessage] = useState('');
-  const [artRequests, setAllArtRequests] = useState([]);
+  const [artRequests, setAllArtRequests] = useState<any[]>([]);
   const [miningStatus, setMiningStatus] = useState<MiningStatus>({
     state: 'none',
   });
@@ -132,6 +132,23 @@ const Home: NextPage = () => {
          * Store our data in React State
          */
         setAllArtRequests(artRequests);
+
+        wavePortalContract.on(
+          'NewWave',
+          (from, timestamp, message, imageUrl) => {
+            console.log('NewWave', from, timestamp, message, imageUrl);
+
+            setAllArtRequests((prevState) => [
+              ...prevState,
+              {
+                address: from,
+                timestamp: new Date(timestamp * 1000),
+                message,
+                imageUrl,
+              },
+            ]);
+          },
+        );
       } else {
         console.log("Ethereum object doesn't exist!");
       }
@@ -195,7 +212,6 @@ const Home: NextPage = () => {
 
         await waveTxn.wait();
         setMiningStatus({ state: 'mined', transactionHash: waveTxn.hash });
-        getArtRequests();
       } else {
         setError('You need the MetaMask browser extension!');
       }
