@@ -121,6 +121,8 @@ type MiningStatus =
     }
   | { state: 'none' };
 
+const MISSING_METAMASK_MESSAGE = `Missing the Metamask browser extension, or if on mobile, open the app in the Metmask app's browser.`;
+
 function getMiningStyles(miningStatus: MiningStatus) {
   switch (miningStatus.state) {
     case 'mining':
@@ -285,7 +287,7 @@ const Home: NextPage = () => {
         await waveTxn.wait();
         setMiningStatus({ state: 'mined', transactionHash: waveTxn.hash });
       } else {
-        setError('You need the MetaMask browser extension!');
+        setError(MISSING_METAMASK_MESSAGE);
       }
     } catch (error: any) {
       if (
@@ -319,7 +321,7 @@ const Home: NextPage = () => {
       const { ethereum } = window;
 
       if (!ethereum) {
-        setError('You need the MetaMask browser extension!');
+        setError(MISSING_METAMASK_MESSAGE);
         return;
       }
 
@@ -357,10 +359,8 @@ const Home: NextPage = () => {
       const { ethereum } = window;
 
       if (!ethereum) {
-        console.log('Make sure you have metamask!');
         return false;
       } else {
-        console.log('We have the ethereum object', ethereum);
         return true;
       }
 
@@ -392,7 +392,7 @@ const Home: NextPage = () => {
         getLatestArtRequestsCount(contract);
         getArtRequests();
       } else {
-        setError('Metamask wallet not detected. Please connect your wallet.');
+        setError(MISSING_METAMASK_MESSAGE);
       }
     })();
   }, []);
@@ -435,7 +435,8 @@ const Home: NextPage = () => {
       <main>
         <p>
           <em>Hi! 👋</em> I&apos;m Nick. Connect your Metamask Ethereum wallet
-          and request to see some art! (not purchase an NFT)
+          and request to see some pictures! (not purchase an NFT). Note that
+          this is a test dApp.
         </p>
         <div
           sx={{
