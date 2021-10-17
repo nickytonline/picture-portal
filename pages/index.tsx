@@ -6,6 +6,8 @@ import { keyframes } from '@emotion/react';
 import { useEffect, useState, useRef } from 'react';
 import { ethers } from 'ethers';
 import abi from '../utils/WavePortal.json';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const httpStatusCodes = [
   '100',
@@ -180,10 +182,7 @@ const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({
 
 const Home: NextPage = () => {
   const [currentAccount, setCurrentAccount] = useState('');
-  const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
   const [message, setMessage] = useState('');
-  const [newMessage, setNewMessage] = useState('');
   const [artRequests, setAllArtRequests] = useState<any[]>([]);
   const [miningStatus, setMiningStatus] = useState<MiningStatus>({
     state: 'none',
@@ -252,7 +251,11 @@ const Home: NextPage = () => {
                 imageUrl,
               },
             ]);
-            setNewMessage(message);
+            toast(
+              <>
+                <Button onClick={scrollToLastMessage}>Go to new message</Button>
+              </>,
+            );
           },
         );
       } else {
@@ -261,11 +264,6 @@ const Home: NextPage = () => {
     } catch (error) {
       console.log(error);
     }
-  }
-
-  function intializeErrorMessaging() {
-    setError('');
-    setSuccessMessage('');
   }
 
   function getContract(ethereum: any) {
@@ -283,13 +281,8 @@ const Home: NextPage = () => {
   async function requestArt(event: any) {
     event.preventDefault;
 
-    intializeErrorMessaging();
-
     if (!message || message.length === 0) {
-      setError('You need to specify a message before requesting to view art');
-      setTimeout(() => {
-        setError('');
-      }, 3000);
+      toast('You need to specify a message before requesting to view art');
       return;
     }
 
@@ -314,7 +307,7 @@ const Home: NextPage = () => {
         await waveTxn.wait();
         setMiningStatus({ state: 'mined', transactionHash: waveTxn.hash });
       } else {
-        setError(MISSING_METAMASK_MESSAGE);
+        toast(MISSING_METAMASK_MESSAGE);
       }
     } catch (error: any) {
       if (
@@ -322,11 +315,9 @@ const Home: NextPage = () => {
           `MetaMask Tx Signature: User denied transaction signature.`,
         )
       ) {
-        setError(
-          'You changed your mind and did not request to see a picture. 😭',
-        );
+        toast('You changed your mind and did not request to see a picture. 😭');
       } else if (error.message.includes('execution reverted: Wait 15m')) {
-        setError(
+        toast(
           `Please don't spam. You can send another message after 15 minutes.`,
         );
       } else if (
@@ -334,13 +325,13 @@ const Home: NextPage = () => {
           `Cannot estimate gas; transaction may fail or may require manual gas limit`,
         )
       ) {
-        setError(
+        toast(
           `Cannot estimate gas; transaction may fail or may require manual gas limit.`,
         );
       } else if (`Trying to withdraw more money than the contract has`) {
-        setError(`Trying to withdraw more money than the contract has`);
+        toast(`Trying to withdraw more money than the contract has`);
       } else {
-        setError('an unknown error occurred');
+        toast('an unknown error occurred');
         console.log(error);
       }
     } finally {
@@ -352,13 +343,11 @@ const Home: NextPage = () => {
   }
 
   async function connectWallet() {
-    intializeErrorMessaging();
-
     try {
       const { ethereum } = window;
 
       if (!ethereum) {
-        setError(MISSING_METAMASK_MESSAGE);
+        toast(MISSING_METAMASK_MESSAGE);
         return;
       }
 
@@ -368,11 +357,7 @@ const Home: NextPage = () => {
 
       setCurrentAccount(accounts[0]);
       getArtRequests();
-      setError('');
-      setSuccessMessage(`Wallet ${accounts[0]} has been connected`);
-      setTimeout(() => {
-        setSuccessMessage('');
-      }, 3000);
+      toast(`Wallet ${accounts[0]} has been connected`);
     } catch (error: any) {
       console.log(error);
 
@@ -381,13 +366,13 @@ const Home: NextPage = () => {
           `Request of type 'wallet_requestPermissions' already pending`,
         )
       ) {
-        setError(
+        toast(
           `You've already requested to connect your Metamask wallet. Click on the Metamask wallet extension to bring it back to focus so you can connect your wallet.`,
         );
       } else if (error.message.includes(`User rejected the request.`)) {
-        setError(`That's so sad. You decided to not connect your wallet. 😭`);
+        toast(`That's so sad. You decided to not connect your wallet. 😭`);
       } else {
-        setError('An unknown error occurred');
+        toast('An unknown error occurred');
       }
     }
   }
@@ -404,7 +389,7 @@ const Home: NextPage = () => {
         console.log('Found an authorized account:', account);
         setCurrentAccount(account);
       } else {
-        setError(
+        toast(
           'No authorized account found. Connect your account in your Metamask wallet.',
         );
       }
@@ -420,7 +405,7 @@ const Home: NextPage = () => {
     const { ethereum } = window;
 
     if (!ethereum) {
-      setError(MISSING_METAMASK_MESSAGE);
+      toast(MISSING_METAMASK_MESSAGE);
       return;
     }
 
@@ -451,6 +436,7 @@ const Home: NextPage = () => {
         </h1>
       </header>
       <main>
+        <ToastContainer aria-live="polite" />
         <p>
           <em>Hi! 👋</em> I&apos;m Nick. Connect your Metamask Ethereum wallet
           and request to see some pictures! (not purchase an NFT). Note that
@@ -497,30 +483,17 @@ const Home: NextPage = () => {
             <Button onClick={requestArt}>Send message</Button>
           </form>
         </div>
-        <div sx={{ height: '2rem' }}>
-          {newMessage && (
-            <div aria-live="polite" sx={{ fontWeight: 700 }}>
-              <span sx={{ marginRight: '0.5rem' }}>{newMessage}</span>
-              <Button onClick={scrollToLastMessage}>Go to new message</Button>
-            </div>
-          )}
-          {error && (
-            <p aria-live="assertive" sx={{ color: 'darkred', fontWeight: 700 }}>
-              {error}
-            </p>
-          )}
-          {successMessage && (
-            <p aria-live="polite" sx={{ color: 'darkgreen', fontWeight: 700 }}>
-              {successMessage}
-            </p>
-          )}
+        <div
+          aria-live="polite"
+          sx={{ height: '2rem', color: 'darkgreen', fontWeight: 700 }}
+        >
           {miningStatus.state !== 'none' && (
-            <p aria-live="polite" sx={{ color: 'darkgreen', fontWeight: 700 }}>
+            <>
               <span aria-hidden="true" sx={getMiningStyles(miningStatus)}>
                 💎
               </span>
               {getMiningMessage(miningStatus)}
-            </p>
+            </>
           )}
         </div>
 
