@@ -166,7 +166,7 @@ const Home: NextPage = () => {
   });
   const lastMessageRef = useRef<HTMLElement>(null);
 
-  function scollToLastMessage() {
+  function scrollToLastMessage() {
     lastMessageRef.current?.scrollIntoView({
       behavior: 'smooth',
     });
