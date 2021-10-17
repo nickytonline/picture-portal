@@ -142,12 +142,13 @@ function getMiningStyles(miningStatus: MiningStatus) {
 
 function getMiningMessage(miningStatus: MiningStatus) {
   const { state } = miningStatus;
+  console.dir(miningStatus);
 
   switch (state) {
     case 'mining':
-      return `Mining transaction ${miningStatus.transactionHash}`;
+      return `Mining transaction`;
     case 'mined': {
-      return `${miningStatus.transactionHash} transaction has been mined`;
+      return `Transaction has been mined`;
     }
     case 'none':
       '';
