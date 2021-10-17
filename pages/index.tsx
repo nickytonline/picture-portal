@@ -358,9 +358,10 @@ const Home: NextPage = () => {
 
       if (!ethereum) {
         console.log('Make sure you have metamask!');
-        return;
+        return false;
       } else {
         console.log('We have the ethereum object', ethereum);
+        return true;
       }
 
       /*
@@ -384,11 +385,16 @@ const Home: NextPage = () => {
    * This runs our function when the page loads.
    */
   useEffect(() => {
-    // TODO: Stuff in here will error out if the wallet isn't connected
-    checkIfWalletIsConnected();
-    const contract = getContract(window.ethereum);
-    getLatestArtRequestsCount(contract);
-    getArtRequests();
+    (async () => {
+      // TODO: Stuff in here will error out if the wallet isn't connected
+      if (await checkIfWalletIsConnected()) {
+        const contract = getContract(window.ethereum);
+        getLatestArtRequestsCount(contract);
+        getArtRequests();
+      } else {
+        setError('Metamask wallet not detected. Please connect your wallet.');
+      }
+    })();
   }, []);
 
   return (
