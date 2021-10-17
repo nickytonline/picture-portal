@@ -518,6 +518,9 @@ const Home: NextPage = () => {
                 color: '#fff',
                 borderRadius: '0.5rem',
               },
+              '& li + li': {
+                marginTop: '1rem',
+              },
             }}
           >
             {artRequests.map((artRequest: any, index, items) => {
