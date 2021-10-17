@@ -306,10 +306,16 @@ const Home: NextPage = () => {
         setError(
           `Please don't spam. You can send another message after 15 minutes.`,
         );
-      } else if (error.message.includes('cannot estimate gas')) {
+      } else if (
+        error.message.includes(
+          `Cannot estimate gas; transaction may fail or may require manual gas limit`,
+        )
+      ) {
         setError(
           `Cannot estimate gas; transaction may fail or may require manual gas limit.`,
         );
+      } else if (`Trying to withdraw more money than the contract has`) {
+        setError(`Trying to withdraw more money than the contract has`);
       } else {
         setError('an unknown error occurred');
         console.log(error);
