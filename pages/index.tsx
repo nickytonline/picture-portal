@@ -292,7 +292,9 @@ const Home: NextPage = () => {
           `MetaMask Tx Signature: User denied transaction signature.`,
         )
       ) {
-        setError('You changed your mind and did not request art.');
+        setError(
+          'You changed your mind and did not request to see a picture. 😭',
+        );
       } else if (error.message.includes('execution reverted: Wait 15m')) {
         setError(
           `Please don't spam. You can send another message after 15 minutes.`,
