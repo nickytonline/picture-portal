@@ -164,10 +164,13 @@ const Home: NextPage = () => {
   const [miningStatus, setMiningStatus] = useState<MiningStatus>({
     state: 'none',
   });
-  const lastMessageRef = useRef<HTMLElement>(null);
+  const lastMessageRef = useRef<HTMLDetailsElement>(null);
 
   function scrollToLastMessage() {
-    lastMessageRef.current?.scrollIntoView({
+    const { current: lastMessage } = lastMessageRef;
+
+    lastMessage?.setAttribute('open', 'true');
+    lastMessage?.scrollIntoView({
       behavior: 'smooth',
     });
   }
@@ -520,8 +523,8 @@ const Home: NextPage = () => {
                   : {};
               return (
                 <li key={index}>
-                  <details>
-                    <summary sx={{ userSelect: 'none' }} {...otherProps}>
+                  <details {...otherProps}>
+                    <summary sx={{ userSelect: 'none' }}>
                       {artRequest.message}
                     </summary>
                     <p>Address: {artRequest.address}</p>
