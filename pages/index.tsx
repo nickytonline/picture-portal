@@ -166,10 +166,10 @@ const Home: NextPage = () => {
   });
   const lastMessageRef = useRef<HTMLElement>(null);
 
-  function focusLastMessage() {
-    setTimeout(() => {
-      lastMessageRef.current?.focus();
-    }, 1000);
+  function scollToLastMessage() {
+    lastMessageRef.current?.scrollIntoView({
+      behavior: 'smooth',
+    });
   }
 
   /*
