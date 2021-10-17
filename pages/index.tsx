@@ -107,7 +107,6 @@ const fadeInfadeOut = keyframes`
 `;
 
 const web3Styles = {
-  color: 'accent',
   opacity: 1,
   '@media screen and (prefers-reduced-motion: no-preference)': {
     animation: `${fadeInfadeOut} 2.5s ease-in-out infinite`,
@@ -407,7 +406,7 @@ const Home: NextPage = () => {
           {artRequestCount} picture requests! 💥
         </marquee>
         <h1 sx={{ fontFamily: 'heading' }}>
-          Welcome to the <span sx={web3Styles}>picture portal 📷</span>
+          Welcome to the <span sx={{ color: 'accent' }}>picture portal 📷</span>
         </h1>
       </header>
       <aside>
@@ -496,8 +495,11 @@ const Home: NextPage = () => {
               return (
                 <li key={index}>
                   <details>
-                    <summary>Message: {artRequest.message}</summary>
-                    <div>Address: {artRequest.address}</div>
+                    <summary sx={{ userSelect: 'none' }}>
+                      {artRequest.message}
+                    </summary>
+                    <p>Address: {artRequest.address}</p>
+                    <p>Message: {artRequest.message}</p>
                     <time dateTime={artRequest.timestamp.toString()}>
                       {artRequest.timestamp.toString()}
                     </time>
