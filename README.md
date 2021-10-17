@@ -1,7 +1,14 @@
-# Art Portal
+# Picture Portal
 
 A project to learn about web3 following a Buildspace walkthrough. The initial
-code is based off of my starter, https://github.com/nickytonline/web3-starter.
+code is based off of my starter, https://github.com/nickytonline/web3-starter,
+which I thought would be fun to do for Hacktoberfest 2021 and potentially be
+helpful for others.
+
+There is a lot to improve as this was just have fun building something, but I'm
+still pretty happy with what I cranked out.
+
+The latest is deployed at https://art.iamdeveloper.com.
 
 ## Contributing
 
