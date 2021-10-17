@@ -389,7 +389,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Welcome to the Art Portal 🎨</title>
+        <title>Welcome to the Picture Portal 📷</title>
         <meta name="description" content="Welcome to Web3" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -401,10 +401,10 @@ const Home: NextPage = () => {
             color: 'lime',
           }}
         >
-          {artRequestCount} art requests! 💥
+          {artRequestCount} picture requests! 💥
         </marquee>
         <h1 sx={{ fontFamily: 'heading' }}>
-          Welcome to the <span sx={web3Styles}>art portal 🎨</span>
+          Welcome to the <span sx={web3Styles}>picture portal 📷</span>
         </h1>
       </header>
       <aside>
@@ -440,7 +440,7 @@ const Home: NextPage = () => {
               onChange={(e) => setMessage(e.target.value)}
             />
             <button sx={{ marginRight: '1rem' }} onClick={requestArt}>
-              Request to view some art!
+              Request to view a picture!
             </button>
           </form>
           <button onClick={connectWallet}>Connect Wallet</button>
