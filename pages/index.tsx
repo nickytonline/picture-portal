@@ -3,7 +3,7 @@ import type { NextPage } from 'next';
 // import Image from 'next/image'; Need to sort this one out
 import Head from 'next/head';
 import { keyframes } from '@emotion/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { ethers } from 'ethers';
 import abi from '../utils/WavePortal.json';
 
@@ -163,6 +163,13 @@ const Home: NextPage = () => {
   const [miningStatus, setMiningStatus] = useState<MiningStatus>({
     state: 'none',
   });
+  const lastMessageRef = useRef<HTMLElement>(null);
+
+  function focusLastMessage() {
+    setTimeout(() => {
+      lastMessageRef.current?.focus();
+    }, 1000);
+  }
 
   /*
    * Create a method that gets all waves from your contract
@@ -217,6 +224,7 @@ const Home: NextPage = () => {
                 imageUrl,
               },
             ]);
+            focusLastMessage();
           },
         );
       } else {
@@ -379,7 +387,9 @@ const Home: NextPage = () => {
     }
 
     checkIfWalletIsConnected(ethereum);
-    getArtRequests();
+    getArtRequests().then((_) => {
+      focusLastMessage();
+    });
   }, []);
 
   return (
@@ -501,10 +511,12 @@ const Home: NextPage = () => {
             }}
           >
             {artRequests.map((artRequest: any, index, items) => {
+              const otherProps =
+                index === items.length - 1 ? { ref: lastMessageRef } : {};
               return (
                 <li key={index}>
                   <details open={index === items.length - 1}>
-                    <summary sx={{ userSelect: 'none' }}>
+                    <summary sx={{ userSelect: 'none' }} {...otherProps}>
                       {artRequest.message}
                     </summary>
                     <p>Address: {artRequest.address}</p>
