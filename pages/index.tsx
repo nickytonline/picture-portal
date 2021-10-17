@@ -413,20 +413,6 @@ const Home: NextPage = () => {
           Welcome to the <span sx={{ color: 'accent' }}>picture portal 📷</span>
         </h1>
       </header>
-      <aside sx={{ display: 'grid', placeItems: 'center' }}>
-        <p>
-          Scrappy source code at{' '}
-          <a href="https://github.com/nickytonline/picture-portal">
-            github.com/nickytonline/picture-portal
-          </a>
-        </p>
-        <p>
-          More about Nick Taylor at{' '}
-          <a href="https://timeline.iamdeveloper.com">
-            timeline.iamdeveloper.com
-          </a>
-        </p>
-      </aside>
       <main>
         <p>
           <em>Hi! 👋</em> I&apos;m Nick. Connect your Metamask Ethereum wallet
@@ -552,6 +538,30 @@ const Home: NextPage = () => {
           </ul>
         )}
       </main>
+      <footer>
+        <nav>
+          <ul
+            sx={{
+              listStyle: 'none',
+              display: 'flex',
+              margin: 0,
+              justifyContent: 'space-between',
+              '& li + li': {
+                paddingLeft: '1rem',
+              },
+            }}
+          >
+            <li>
+              <a href="https://github.com/nickytonline/picture-portal">
+                source code
+              </a>
+            </li>
+            <li>
+              <a href="https://timeline.iamdeveloper.com">more about Nick</a>
+            </li>
+          </ul>
+        </nav>
+      </footer>
     </>
   );
 };
