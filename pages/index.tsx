@@ -480,7 +480,9 @@ const Home: NextPage = () => {
               onChange={(e) => setMessage(e.target.value)}
               sx={{ marginRight: '0.5rem' }}
             />
-            <Button onClick={requestArt}>Send message</Button>
+            <Button type="submit" onClick={requestArt}>
+              Send message
+            </Button>
           </form>
         </div>
         <div
