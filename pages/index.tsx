@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import Image from 'next/image';
+// import Image from 'next/image'; Need to sort this one out
 import Head from 'next/head';
 import { keyframes } from '@emotion/react';
 import { useEffect, useState } from 'react';
@@ -322,6 +322,14 @@ const Home: NextPage = () => {
           Welcome to the <span sx={web3Styles}>art portal 🎨</span>
         </h1>
       </header>
+      <aside>
+        <p>
+          More about Nick Taylor at{' '}
+          <a href="https://timeline.iamdeveloper.com">
+            timeline.iamdeveloper.com
+          </a>
+        </p>
+      </aside>
       <main>
         <p>
           <em>Hi! 👋</em> I&apos;m Nick. Connect your Metamask Ethereum wallet
@@ -404,7 +412,7 @@ const Home: NextPage = () => {
                       {artRequest.timestamp.toString()}
                     </time>
                     <div>Message: {artRequest.message}</div>
-                    <Image
+                    <img
                       src={artRequest.imageUrl}
                       alt="Art for this request"
                       width="375"
