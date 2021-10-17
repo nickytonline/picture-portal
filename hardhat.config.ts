@@ -11,10 +11,10 @@ const {
 const config: HardhatUserConfig = {
   solidity: '0.8.0',
   networks: {
-    rinkeby: {
-      url: ALCHEMY_API_URL,
-      accounts: [PRIVATE_RINKEBY_ACCOUNT_KEY],
-    },
+    // rinkeby: {
+    //   url: ALCHEMY_API_URL,
+    //   accounts: [PRIVATE_RINKEBY_ACCOUNT_KEY],
+    // },
   },
 };
 

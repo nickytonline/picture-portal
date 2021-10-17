@@ -26,9 +26,9 @@ first.
 1. Install the dependencies
 
    ```bash
-   npm install
+   npm ci
    # or
-   yarn
+   yarn install --frozen-lockfile
    ```
 
 1. Start the project
@@ -75,7 +75,7 @@ yarn test
 To run tests in watch mode:
 
 ```bash
-npm test:watch
+npm run test:watch
 # or
 yarn test:watch
 ```
@@ -179,3 +179,22 @@ from the creators of Next.js.
 Check out our
 [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more
 details.
+
+## Docker
+
+This repository build automatically to `ghcr.io` but you can always test the
+implementation:
+
+```shell
+docker build . -t nickyt-picture-portal-release-demo
+docker run -dit --rm -p 8080:80 --name nickyt-picture-portal-release-demo nickyt-picture-portal-release-demo
+```
+
+## Contributing
+
+This repository uses `husky` with pre-commit and message hooks. All you need to
+do after staging some files is to run:
+
+```shell
+npm run push
+```
