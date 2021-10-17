@@ -1,19 +1,24 @@
 {
-  "name": "picture-portal",
+  "name": "nickyt-picture-portal-release-demo",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=14",
+    "npm": ">=7"
+  },
   "scripts": {
     "dev": "next dev",
-    "prebuild": "yarn test && npx hardhat test",
+    "prebuild": "npm test && npx hardhat test",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "test:watch": "yarn jest -- --watch",
+    "test:watch": "npm run jest -- --watch",
     "prepare": "husky install",
     "storybook": "start-storybook -p 6006",
     "prebuild-storybook": "rimraf storybook-static",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "push": "cz"
   },
   "dependencies": {
     "@apollo/client": "^3.4.15",
@@ -38,6 +43,8 @@
     "@types/react": "17.0.26",
     "babel-loader": "^8.2.2",
     "chai": "^4.3.4",
+    "commitizen": "^4.2.4",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
     "eslint-config-prettier": "^8.3.0",
