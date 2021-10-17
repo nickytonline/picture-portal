@@ -23,7 +23,7 @@ declare global {
   }
 }
 
-const contractAddress = '0x4f01263ca36a4dd48e7dD536Ae15D8aa284053d5';
+const contractAddress = '0x1D4077F990ba4A56E09EEd3da6edfE2AF7177B92';
 const contractABI = abi.abi;
 
 const fadeInfadeOut = keyframes`
@@ -205,6 +205,10 @@ const Home: NextPage = () => {
         )
       ) {
         setError('You changed your mind and did not request art.');
+      } else if (error.message.includes('execution reverted: Wait 15m')) {
+        setError(
+          `Please don't spam. You can send another message after 15 minutes.`,
+        );
       } else {
         setError('an unknown error occurred');
         console.log(error);
