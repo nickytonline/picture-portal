@@ -1,3 +1,10 @@
+## [1.1.0](https://github.com/0-vortex/picture-portal/compare/v1.0.0...v1.1.0) (2021-10-17)
+
+### Build System
+
+- add open-sauced check engines feature
+  ([b31a5a3](https://github.com/0-vortex/picture-portal/commit/b31a5a38d99aabdd3e60e03f042879ad304037ef))
+
 ## 1.0.0 (2021-10-17)
 
 ### Build System

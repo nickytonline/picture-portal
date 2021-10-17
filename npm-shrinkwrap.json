@@ -1,12 +1,12 @@
 {
   "name": "picture-portal",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "lockfileVersion": 2,
   "requires": true,
   "packages": {
     "": {
       "name": "picture-portal",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "dependencies": {
         "@apollo/client": "^3.4.15",
         "@nomiclabs/hardhat-ethers": "^2.0.2",
