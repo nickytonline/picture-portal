@@ -142,17 +142,40 @@ function getMiningStyles(miningStatus: MiningStatus) {
 
 function getMiningMessage(miningStatus: MiningStatus) {
   const { state } = miningStatus;
+  console.dir(miningStatus);
 
   switch (state) {
     case 'mining':
-      return `Mining transaction ${miningStatus.transactionHash}`;
+      return `Mining transaction`;
     case 'mined': {
-      return `${miningStatus.transactionHash} transaction has been mined`;
+      return `Transaction has been mined`;
     }
     case 'none':
       '';
   }
 }
+
+// TODO: Improve this.
+const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({
+  children,
+  onClick,
+  type = 'button',
+}) => {
+  return (
+    <button
+      type={type}
+      sx={{
+        backgroundColor: 'accent',
+        color: '#fff',
+        borderRadius: '0.5rem',
+        border: 'none',
+        padding: '0.25rem 0.5rem',
+      }}
+    >
+      {children}
+    </button>
+  );
+};
 
 const Home: NextPage = () => {
   const [currentAccount, setCurrentAccount] = useState('');
@@ -164,12 +187,15 @@ const Home: NextPage = () => {
   const [miningStatus, setMiningStatus] = useState<MiningStatus>({
     state: 'none',
   });
-  const lastMessageRef = useRef<HTMLElement>(null);
+  const lastMessageRef = useRef<HTMLDetailsElement>(null);
 
-  function focusLastMessage() {
-    setTimeout(() => {
-      lastMessageRef.current?.focus();
-    }, 1000);
+  function scrollToLastMessage() {
+    const { current: lastMessage } = lastMessageRef;
+
+    lastMessage?.setAttribute('open', 'true');
+    lastMessage?.scrollIntoView({
+      behavior: 'smooth',
+    });
   }
 
   /*
@@ -302,6 +328,16 @@ const Home: NextPage = () => {
         setError(
           `Please don't spam. You can send another message after 15 minutes.`,
         );
+      } else if (
+        error.message.includes(
+          `Cannot estimate gas; transaction may fail or may require manual gas limit`,
+        )
+      ) {
+        setError(
+          `Cannot estimate gas; transaction may fail or may require manual gas limit.`,
+        );
+      } else if (`Trying to withdraw more money than the contract has`) {
+        setError(`Trying to withdraw more money than the contract has`);
       } else {
         setError('an unknown error occurred');
         console.log(error);
@@ -388,9 +424,7 @@ const Home: NextPage = () => {
     }
 
     checkIfWalletIsConnected(ethereum);
-    getArtRequests().then((_) => {
-      focusLastMessage();
-    });
+    getArtRequests();
   }, []);
 
   return (
@@ -415,20 +449,6 @@ const Home: NextPage = () => {
           Welcome to the <span sx={{ color: 'accent' }}>picture portal 📷</span>
         </h1>
       </header>
-      <aside sx={{ display: 'grid', placeItems: 'center' }}>
-        <p>
-          Scrappy source code at{' '}
-          <a href="https://github.com/nickytonline/picture-portal">
-            github.com/nickytonline/picture-portal
-          </a>
-        </p>
-        <p>
-          More about Nick Taylor at{' '}
-          <a href="https://timeline.iamdeveloper.com">
-            timeline.iamdeveloper.com
-          </a>
-        </p>
-      </aside>
       <main>
         <p>
           <em>Hi! 👋</em> I&apos;m Nick. Connect your Metamask Ethereum wallet
@@ -442,9 +462,24 @@ const Home: NextPage = () => {
             marginBottom: '1rem',
           }}
         >
-          <p sx={{ color: 'accent', fontWeight: 500 }}>
-            Connected account: {currentAccount || 'disconnected'}
-          </p>
+          <div sx={{ margin: '1rem 0' }}>
+            {currentAccount ? (
+              <span
+                sx={{
+                  background: '#000',
+                  color: 'lime',
+                  fontWeight: 500,
+                  padding: '0.5rem',
+                  borderRadius: '0.5rem',
+                  marginRight: '0.5rem',
+                }}
+              >
+                Account: {currentAccount}
+              </span>
+            ) : (
+              <Button onClick={connectWallet}>Connect Wallet</Button>
+            )}
+          </div>
           <form
             onSubmit={(event) => {
               event?.preventDefault();
@@ -456,16 +491,18 @@ const Home: NextPage = () => {
               value={message}
               placeholder="Message"
               onChange={(e) => setMessage(e.target.value)}
+              sx={{ marginRight: '0.5rem' }}
             />
-            <button sx={{ marginRight: '1rem' }} onClick={requestArt}>
-              Request to view a picture!
-            </button>
+            <Button onClick={requestArt}>Send message</Button>
           </form>
-          {!currentAccount && (
-            <button onClick={connectWallet}>Connect Wallet</button>
-          )}
         </div>
         <div sx={{ height: '2rem' }}>
+          {newMessage && (
+            <div aria-live="polite" sx={{ fontWeight: 700 }}>
+              <span sx={{ marginRight: '0.5rem' }}>{newMessage}</span>
+              <Button onClick={scrollToLastMessage}>Go to new message</Button>
+            </div>
+          )}
           {error && (
             <p aria-live="assertive" sx={{ color: 'darkred', fontWeight: 700 }}>
               {error}
@@ -474,17 +511,6 @@ const Home: NextPage = () => {
           {successMessage && (
             <p aria-live="polite" sx={{ color: 'darkgreen', fontWeight: 700 }}>
               {successMessage}
-            </p>
-          )}
-          {newMessage && (
-            <p aria-live="polite" sx={{ fontWeight: 700 }}>
-              Go to new message:{' '}
-              <a
-                href={`#message${artRequests.length - 1}`}
-                sx={{ color: 'accent' }}
-              >
-                {newMessage}
-              </a>
             </p>
           )}
           {miningStatus.state !== 'none' && (
@@ -520,6 +546,9 @@ const Home: NextPage = () => {
                 color: '#fff',
                 borderRadius: '0.5rem',
               },
+              '& li + li': {
+                marginTop: '1rem',
+              },
             }}
           >
             {artRequests.map((artRequest: any, index, items) => {
@@ -529,8 +558,8 @@ const Home: NextPage = () => {
                   : {};
               return (
                 <li key={index}>
-                  <details open={index === items.length - 1}>
-                    <summary sx={{ userSelect: 'none' }} {...otherProps}>
+                  <details {...otherProps}>
+                    <summary sx={{ userSelect: 'none' }}>
                       {artRequest.message}
                     </summary>
                     <p>Address: {artRequest.address}</p>
@@ -551,6 +580,30 @@ const Home: NextPage = () => {
           </ul>
         )}
       </main>
+      <footer>
+        <nav>
+          <ul
+            sx={{
+              listStyle: 'none',
+              display: 'flex',
+              margin: 0,
+              justifyContent: 'space-between',
+              '& li + li': {
+                paddingLeft: '1rem',
+              },
+            }}
+          >
+            <li>
+              <a href="https://github.com/nickytonline/picture-portal">
+                source code
+              </a>
+            </li>
+            <li>
+              <a href="https://timeline.iamdeveloper.com">more about Nick</a>
+            </li>
+          </ul>
+        </nav>
+      </footer>
     </>
   );
 };
