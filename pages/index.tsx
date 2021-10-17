@@ -388,9 +388,7 @@ const Home: NextPage = () => {
     }
 
     checkIfWalletIsConnected(ethereum);
-    getArtRequests().then((_) => {
-      focusLastMessage();
-    });
+    getArtRequests();
   }, []);
 
   return (
