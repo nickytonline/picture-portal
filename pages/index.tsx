@@ -477,7 +477,8 @@ const Home: NextPage = () => {
                 backgroundImage: `linear-gradient(to right top, #d8ff10, #ffb900, #ff5843, #ff0099, #c312eb)`,
                 padding: '1rem',
               },
-              '& [data-list-item-wrapper]': {
+              '& details': {
+                cursor: 'pointer',
                 display: 'flex',
                 flexDirection: 'column',
                 fontWeight: 500,
@@ -491,19 +492,19 @@ const Home: NextPage = () => {
             {artRequests.map((artRequest: any, index) => {
               return (
                 <li key={index}>
-                  <div data-list-item-wrapper={true}>
+                  <details>
+                    <summary>Message: {artRequest.message}</summary>
                     <div>Address: {artRequest.address}</div>
                     <time dateTime={artRequest.timestamp.toString()}>
                       {artRequest.timestamp.toString()}
                     </time>
-                    <div>Message: {artRequest.message}</div>
                     <img
                       src={artRequest.imageUrl}
                       alt="Art for this request"
                       width="375"
                       height="300"
                     />
-                  </div>
+                  </details>
                 </li>
               );
             })}
