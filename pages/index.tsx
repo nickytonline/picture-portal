@@ -411,6 +411,12 @@ const Home: NextPage = () => {
       </header>
       <aside>
         <p>
+          Scrappy source code at{' '}
+          <a href="https://github.com/nickytonline/picture-portal">
+            github.com/nickytonline/picture-portal
+          </a>
+        </p>
+        <p>
           More about Nick Taylor at{' '}
           <a href="https://timeline.iamdeveloper.com">
             timeline.iamdeveloper.com
