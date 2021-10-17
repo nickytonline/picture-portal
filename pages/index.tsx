@@ -6,7 +6,6 @@ import { keyframes } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import abi from '../utils/WavePortal.json';
-import { Grid } from '@theme-ui/components';
 
 const httpStatusCodes = [
   '100',
@@ -156,7 +155,6 @@ function getMiningMessage(miningStatus: MiningStatus) {
 }
 
 const Home: NextPage = () => {
-  const [artRequestCount, setArtRequestCount] = useState(0);
   const [currentAccount, setCurrentAccount] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -244,13 +242,6 @@ const Home: NextPage = () => {
     );
 
     return wavePortalContract;
-  }
-
-  async function getLatestArtRequestsCount(contract: any) {
-    const count = (await contract.getTotalArtRequests()).toNumber();
-    setArtRequestCount(count);
-
-    return count;
   }
 
   async function requestArt(event: any) {
@@ -360,8 +351,6 @@ const Home: NextPage = () => {
 
       if (!ethereum) {
         return false;
-      } else {
-        return true;
       }
 
       /*
@@ -376,6 +365,8 @@ const Home: NextPage = () => {
       } else {
         console.log('No authorized account found');
       }
+
+      return true;
     } catch (error) {
       console.log(error);
     }
@@ -389,7 +380,6 @@ const Home: NextPage = () => {
       // TODO: Stuff in here will error out if the wallet isn't connected
       if (await checkIfWalletIsConnected()) {
         const contract = getContract(window.ethereum);
-        getLatestArtRequestsCount(contract);
         getArtRequests();
       } else {
         setError(MISSING_METAMASK_MESSAGE);
@@ -410,9 +400,10 @@ const Home: NextPage = () => {
             fontSize: '2rem',
             background: '#000',
             color: 'lime',
+            padding: '0.5rem',
           }}
         >
-          {artRequestCount} picture requests! 💥
+          {artRequests.length} picture requests! 💥
         </marquee>
         <h1 sx={{ fontFamily: 'heading' }}>
           Welcome to the <span sx={{ color: 'accent' }}>picture portal 📷</span>
@@ -441,10 +432,13 @@ const Home: NextPage = () => {
         <div
           sx={{
             display: 'flex',
-            alignItems: 'flex-start',
+            flexDirection: 'column',
             marginBottom: '1rem',
           }}
         >
+          <p sx={{ color: 'accent', fontWeight: 500 }}>
+            Connected account: {currentAccount || 'disconnected'}
+          </p>
           <form
             onSubmit={(event) => {
               event?.preventDefault();
@@ -461,7 +455,9 @@ const Home: NextPage = () => {
               Request to view a picture!
             </button>
           </form>
-          <button onClick={connectWallet}>Connect Wallet</button>
+          {!currentAccount && (
+            <button onClick={connectWallet}>Connect Wallet</button>
+          )}
         </div>
         <div sx={{ height: '2rem' }}>
           {error && (
@@ -509,10 +505,10 @@ const Home: NextPage = () => {
               },
             }}
           >
-            {artRequests.map((artRequest: any, index) => {
+            {artRequests.map((artRequest: any, index, items) => {
               return (
                 <li key={index}>
-                  <details>
+                  <details open={index === items.length - 1}>
                     <summary sx={{ userSelect: 'none' }}>
                       {artRequest.message}
                     </summary>
