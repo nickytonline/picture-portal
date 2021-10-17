@@ -121,7 +121,7 @@ type MiningStatus =
     }
   | { state: 'none' };
 
-const MISSING_METAMASK_MESSAGE = `Missing the Metamask browser extension, or if on mobile, open the app in the Metmask app's browser.`;
+const MISSING_METAMASK_MESSAGE = `Missing the Metamask browser extension, or if on mobile, open the app in the Metamask app's browser.`;
 
 function getMiningStyles(miningStatus: MiningStatus) {
   switch (miningStatus.state) {
