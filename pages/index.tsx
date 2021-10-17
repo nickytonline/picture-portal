@@ -155,6 +155,28 @@ function getMiningMessage(miningStatus: MiningStatus) {
   }
 }
 
+// TODO: Improve this.
+const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({
+  children,
+  onClick,
+  type = 'button',
+}) => {
+  return (
+    <button
+      type={type}
+      sx={{
+        backgroundColor: 'accent',
+        color: '#fff',
+        borderRadius: '0.5rem',
+        border: 'none',
+        padding: '0.25rem 0.5rem',
+      }}
+    >
+      {children}
+    </button>
+  );
+};
+
 const Home: NextPage = () => {
   const [currentAccount, setCurrentAccount] = useState('');
   const [error, setError] = useState('');
@@ -455,7 +477,7 @@ const Home: NextPage = () => {
                 Account: {currentAccount}
               </span>
             ) : (
-              <button onClick={connectWallet}>Connect Wallet</button>
+              <Button onClick={connectWallet}>Connect Wallet</Button>
             )}
           </div>
           <form
@@ -469,17 +491,16 @@ const Home: NextPage = () => {
               value={message}
               placeholder="Message"
               onChange={(e) => setMessage(e.target.value)}
+              sx={{ marginRight: '0.5rem' }}
             />
-            <button sx={{ marginRight: '1rem' }} onClick={requestArt}>
-              Send message
-            </button>
+            <Button onClick={requestArt}>Send message</Button>
           </form>
         </div>
         <div sx={{ height: '2rem' }}>
           {newMessage && (
             <div aria-live="polite" sx={{ fontWeight: 700 }}>
               <span sx={{ marginRight: '0.5rem' }}>{newMessage}</span>
-              <button onClick={scrollToLastMessage}>Go to new message</button>
+              <Button onClick={scrollToLastMessage}>Go to new message</Button>
             </div>
           )}
           {error && (
