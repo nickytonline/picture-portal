@@ -435,19 +435,20 @@ const Home: NextPage = () => {
           }}
         >
           <div sx={{ margin: '1rem 0' }}>
-            <span
-              sx={{
-                background: '#000',
-                color: 'lime',
-                fontWeight: 500,
-                padding: '0.5rem',
-                borderRadius: '0.5rem',
-                marginRight: '0.5rem',
-              }}
-            >
-              Connected account: {currentAccount || 'disconnected'}
-            </span>
-            {!currentAccount && (
+            {currentAccount ? (
+              <span
+                sx={{
+                  background: '#000',
+                  color: 'lime',
+                  fontWeight: 500,
+                  padding: '0.5rem',
+                  borderRadius: '0.5rem',
+                  marginRight: '0.5rem',
+                }}
+              >
+                Account: {currentAccount}
+              </span>
+            ) : (
               <button onClick={connectWallet}>Connect Wallet</button>
             )}
           </div>
@@ -464,7 +465,7 @@ const Home: NextPage = () => {
               onChange={(e) => setMessage(e.target.value)}
             />
             <button sx={{ marginRight: '1rem' }} onClick={requestArt}>
-              Request to view a picture!
+              Send message
             </button>
           </form>
         </div>
