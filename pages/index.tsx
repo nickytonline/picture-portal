@@ -159,6 +159,7 @@ const Home: NextPage = () => {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [message, setMessage] = useState('');
+  const [newMessage, setNewMessage] = useState('');
   const [artRequests, setAllArtRequests] = useState<any[]>([]);
   const [miningStatus, setMiningStatus] = useState<MiningStatus>({
     state: 'none',
@@ -224,7 +225,7 @@ const Home: NextPage = () => {
                 imageUrl,
               },
             ]);
-            focusLastMessage();
+            setNewMessage(message);
           },
         );
       } else {
@@ -475,6 +476,17 @@ const Home: NextPage = () => {
               {successMessage}
             </p>
           )}
+          {newMessage && (
+            <p aria-live="polite" sx={{ fontWeight: 700 }}>
+              Go to new message:{' '}
+              <a
+                href={`#message${artRequests.length - 1}`}
+                sx={{ color: 'accent' }}
+              >
+                {newMessage}
+              </a>
+            </p>
+          )}
           {miningStatus.state !== 'none' && (
             <p aria-live="polite" sx={{ color: 'darkgreen', fontWeight: 700 }}>
               <span aria-hidden="true" sx={getMiningStyles(miningStatus)}>
@@ -491,7 +503,7 @@ const Home: NextPage = () => {
               listStyle: 'none',
               overflowX: 'hidden',
               overflowY: 'scroll',
-              height: '60vh',
+              height: '50vh',
               padding: '1rem',
               '& li': {
                 borderRadius: '0.5rem',
@@ -512,7 +524,9 @@ const Home: NextPage = () => {
           >
             {artRequests.map((artRequest: any, index, items) => {
               const otherProps =
-                index === items.length - 1 ? { ref: lastMessageRef } : {};
+                index === items.length - 1
+                  ? { ref: lastMessageRef, id: `message${index}` }
+                  : {};
               return (
                 <li key={index}>
                   <details open={index === items.length - 1}>
