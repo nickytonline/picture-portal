@@ -6,6 +6,7 @@ import { keyframes } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import abi from '../utils/WavePortal.json';
+import { Grid } from '@theme-ui/components';
 
 const httpStatusCodes = [
   '100',
@@ -411,7 +412,7 @@ const Home: NextPage = () => {
           Welcome to the <span sx={{ color: 'accent' }}>picture portal 📷</span>
         </h1>
       </header>
-      <aside>
+      <aside sx={{ display: 'grid', placeItems: 'center' }}>
         <p>
           Scrappy source code at{' '}
           <a href="https://github.com/nickytonline/picture-portal">
