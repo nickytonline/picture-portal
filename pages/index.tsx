@@ -302,6 +302,10 @@ const Home: NextPage = () => {
         setError(
           `Please don't spam. You can send another message after 15 minutes.`,
         );
+      } else if (error.message.includes('cannot estimate gas')) {
+        setError(
+          `Cannot estimate gas; transaction may fail or may require manual gas limit.`,
+        );
       } else {
         setError('an unknown error occurred');
         console.log(error);
