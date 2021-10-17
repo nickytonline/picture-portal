@@ -456,24 +456,26 @@ const Home: NextPage = () => {
           </form>
           <button onClick={connectWallet}>Connect Wallet</button>
         </div>
-        {error && (
-          <p aria-live="assertive" sx={{ color: 'darkred', fontWeight: 700 }}>
-            {error}
-          </p>
-        )}
-        {successMessage && (
-          <p aria-live="polite" sx={{ color: 'darkgreen', fontWeight: 700 }}>
-            {successMessage}
-          </p>
-        )}
-        {miningStatus.state !== 'none' && (
-          <p aria-live="polite" sx={{ color: 'darkgreen', fontWeight: 700 }}>
-            <span aria-hidden="true" sx={getMiningStyles(miningStatus)}>
-              💎
-            </span>
-            {getMiningMessage(miningStatus)}
-          </p>
-        )}
+        <div sx={{ height: '2rem' }}>
+          {error && (
+            <p aria-live="assertive" sx={{ color: 'darkred', fontWeight: 700 }}>
+              {error}
+            </p>
+          )}
+          {successMessage && (
+            <p aria-live="polite" sx={{ color: 'darkgreen', fontWeight: 700 }}>
+              {successMessage}
+            </p>
+          )}
+          {miningStatus.state !== 'none' && (
+            <p aria-live="polite" sx={{ color: 'darkgreen', fontWeight: 700 }}>
+              <span aria-hidden="true" sx={getMiningStyles(miningStatus)}>
+                💎
+              </span>
+              {getMiningMessage(miningStatus)}
+            </p>
+          )}
+        </div>
 
         {artRequests.length > 0 && (
           <ul
