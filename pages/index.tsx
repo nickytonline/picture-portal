@@ -1,3 +1,4 @@
+// TODO: Break this apart lol.
 import type { NextPage } from 'next';
 // import Image from 'next/image'; Need to sort this one out
 import Head from 'next/head';
