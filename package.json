@@ -1,5 +1,5 @@
 {
-  "name": "nickyt-picture-portal-release-demo",
+  "name": "picture-portal",
   "version": "1.0.0",
   "private": true,
   "engines": {
@@ -21,7 +21,9 @@
     "storybook": "start-storybook -p 6006",
     "prebuild-storybook": "rimraf storybook-static",
     "build-storybook": "build-storybook",
-    "push": "cz"
+    "push": "cz",
+    "preinstall": "npx @open-sauced/check-engines",
+    "prestart": "npx @open-sauced/check-engines"
   },
   "dependencies": {
     "@apollo/client": "^3.4.15",
@@ -37,6 +39,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.15.8",
+    "@open-sauced/check-engines": "^1.0.0",
     "@open-sauced/semantic-release-conventional-config": "^1.4.0",
     "@storybook/addon-actions": "^6.3.12",
     "@storybook/addon-docs": "^6.3.12",

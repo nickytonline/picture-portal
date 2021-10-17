@@ -1,11 +1,11 @@
 {
-  "name": "nickyt-picture-portal-release-demo",
+  "name": "picture-portal",
   "version": "1.0.0",
   "lockfileVersion": 2,
   "requires": true,
   "packages": {
     "": {
-      "name": "nickyt-picture-portal-release-demo",
+      "name": "picture-portal",
       "version": "1.0.0",
       "dependencies": {
         "@apollo/client": "^3.4.15",
@@ -21,6 +21,7 @@
       },
       "devDependencies": {
         "@babel/core": "^7.15.8",
+        "@open-sauced/check-engines": "^1.0.0",
         "@open-sauced/semantic-release-conventional-config": "^1.4.0",
         "@storybook/addon-actions": "^6.3.12",
         "@storybook/addon-docs": "^6.3.12",
@@ -5405,6 +5406,22 @@
       "dev": true,
       "dependencies": {
         "@octokit/openapi-types": "^11.2.0"
+      }
+    },
+    "node_modules/@open-sauced/check-engines": {
+      "version": "1.0.0",
+      "resolved": "https://registry.npmjs.org/@open-sauced/check-engines/-/check-engines-1.0.0.tgz",
+      "integrity": "sha512-J9kkeAZGFxFWEPstke0rlT5vN7KU6CVPHr29dTKvjT3iOgJmfDK4eFM+uSy2BWoZ4GK9kC+tans3sqfYmf+zNA==",
+      "dev": true,
+      "dependencies": {
+        "npm-install-checks": "^4.0.0"
+      },
+      "bin": {
+        "check-engines": "index.js"
+      },
+      "engines": {
+        "node": ">=10",
+        "npm": ">=3"
       }
     },
     "node_modules/@open-sauced/semantic-release-conventional-config": {
@@ -24640,6 +24657,51 @@
         "node": ">=10"
       }
     },
+    "node_modules/npm-install-checks": {
+      "version": "4.0.0",
+      "resolved": "https://registry.npmjs.org/npm-install-checks/-/npm-install-checks-4.0.0.tgz",
+      "integrity": "sha512-09OmyDkNLYwqKPOnbI8exiOZU2GVVmQp7tgez2BPi5OZC8M82elDAps7sxC4l//uSUtotWqoEIDwjRvWH4qz8w==",
+      "dev": true,
+      "dependencies": {
+        "semver": "^7.1.1"
+      },
+      "engines": {
+        "node": ">=10"
+      }
+    },
+    "node_modules/npm-install-checks/node_modules/lru-cache": {
+      "version": "6.0.0",
+      "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-6.0.0.tgz",
+      "integrity": "sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==",
+      "dev": true,
+      "dependencies": {
+        "yallist": "^4.0.0"
+      },
+      "engines": {
+        "node": ">=10"
+      }
+    },
+    "node_modules/npm-install-checks/node_modules/semver": {
+      "version": "7.3.5",
+      "resolved": "https://registry.npmjs.org/semver/-/semver-7.3.5.tgz",
+      "integrity": "sha512-PoeGJYh8HK4BTO/a9Tf6ZG3veo/A7ZVsYrSA6J8ny9nb3B1VrpkuN+z9OE5wfE5p6H4LchYZsegiQgbJD94ZFQ==",
+      "dev": true,
+      "dependencies": {
+        "lru-cache": "^6.0.0"
+      },
+      "bin": {
+        "semver": "bin/semver.js"
+      },
+      "engines": {
+        "node": ">=10"
+      }
+    },
+    "node_modules/npm-install-checks/node_modules/yallist": {
+      "version": "4.0.0",
+      "resolved": "https://registry.npmjs.org/yallist/-/yallist-4.0.0.tgz",
+      "integrity": "sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==",
+      "dev": true
+    },
     "node_modules/npm-run-path": {
       "version": "4.0.1",
       "resolved": "https://registry.npmjs.org/npm-run-path/-/npm-run-path-4.0.1.tgz",
@@ -39657,6 +39719,15 @@
       "dev": true,
       "requires": {
         "@octokit/openapi-types": "^11.2.0"
+      }
+    },
+    "@open-sauced/check-engines": {
+      "version": "1.0.0",
+      "resolved": "https://registry.npmjs.org/@open-sauced/check-engines/-/check-engines-1.0.0.tgz",
+      "integrity": "sha512-J9kkeAZGFxFWEPstke0rlT5vN7KU6CVPHr29dTKvjT3iOgJmfDK4eFM+uSy2BWoZ4GK9kC+tans3sqfYmf+zNA==",
+      "dev": true,
+      "requires": {
+        "npm-install-checks": "^4.0.0"
       }
     },
     "@open-sauced/semantic-release-conventional-config": {
@@ -56650,6 +56721,41 @@
         "yallist": {
           "version": "4.0.0",
           "bundled": true,
+          "dev": true
+        }
+      }
+    },
+    "npm-install-checks": {
+      "version": "4.0.0",
+      "resolved": "https://registry.npmjs.org/npm-install-checks/-/npm-install-checks-4.0.0.tgz",
+      "integrity": "sha512-09OmyDkNLYwqKPOnbI8exiOZU2GVVmQp7tgez2BPi5OZC8M82elDAps7sxC4l//uSUtotWqoEIDwjRvWH4qz8w==",
+      "dev": true,
+      "requires": {
+        "semver": "^7.1.1"
+      },
+      "dependencies": {
+        "lru-cache": {
+          "version": "6.0.0",
+          "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-6.0.0.tgz",
+          "integrity": "sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==",
+          "dev": true,
+          "requires": {
+            "yallist": "^4.0.0"
+          }
+        },
+        "semver": {
+          "version": "7.3.5",
+          "resolved": "https://registry.npmjs.org/semver/-/semver-7.3.5.tgz",
+          "integrity": "sha512-PoeGJYh8HK4BTO/a9Tf6ZG3veo/A7ZVsYrSA6J8ny9nb3B1VrpkuN+z9OE5wfE5p6H4LchYZsegiQgbJD94ZFQ==",
+          "dev": true,
+          "requires": {
+            "lru-cache": "^6.0.0"
+          }
+        },
+        "yallist": {
+          "version": "4.0.0",
+          "resolved": "https://registry.npmjs.org/yallist/-/yallist-4.0.0.tgz",
+          "integrity": "sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==",
           "dev": true
         }
       }
