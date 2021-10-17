@@ -8,7 +8,7 @@ helpful for others.
 There is a lot to improve as this was just have fun building something, but I'm
 still pretty happy with what I cranked out.
 
-The latest is deployed at https://art.iamdeveloper.com.
+The latest is deployed at https://pics.iamdeveloper.com.
 
 ## Contributing
 
