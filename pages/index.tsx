@@ -9,28 +9,24 @@ import abi from '../utils/WavePortal.json';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const httpStatusCodes = [
+// Not all HTTP status codes have images on http.cat.
+const httpCatStatusCodes = [
   '100',
   '101',
   '102',
-  '103',
   '200',
   '201',
   '202',
   '203',
   '204',
-  '205',
   '206',
   '207',
-  '208',
-  '226',
   '300',
   '301',
   '302',
   '303',
   '304',
   '305',
-  '306',
   '307',
   '308',
   '400',
@@ -52,30 +48,36 @@ const httpStatusCodes = [
   '416',
   '417',
   '418',
+  '420',
   '421',
   '422',
   '423',
   '424',
   '425',
   '426',
-  '427',
-  '428',
   '429',
-  '430',
   '431',
+  '444',
+  '450',
   '451',
+  '497',
+  '498',
+  '499',
   '500',
   '501',
   '502',
   '503',
   '504',
-  '505',
   '506',
   '507',
   '508',
   '509',
   '510',
   '511',
+  '521',
+  '523',
+  '525',
+  '599',
 ];
 
 function isMobile() {
@@ -305,8 +307,8 @@ const Home: NextPage = () => {
         const wavePortalContract = getContract(ethereum);
 
         const imageUrl = `https://http.cat/${
-          httpStatusCodes[
-            Math.floor(Math.random() * httpStatusCodes.length - 1)
+          httpCatStatusCodes[
+            Math.floor(Math.random() * httpCatStatusCodes.length - 1)
           ]
         }`;
 
