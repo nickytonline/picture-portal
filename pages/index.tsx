@@ -471,14 +471,23 @@ const Home: NextPage = () => {
               <span
                 sx={{
                   background: '#000',
-                  color: 'lime',
+                  color: '#fff',
                   fontWeight: 500,
                   padding: '0.5rem',
                   borderRadius: '0.5rem',
                   marginRight: '0.5rem',
                 }}
               >
-                Account: {currentAccount}
+                Account:{' '}
+                <a
+                  sx={{ color: 'lime' }}
+                  href={`https://etherscan.io/address/${currentAccount}`}
+                  title={`${currentAccount} account on etherscan.io`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {currentAccount}
+                </a>
               </span>
             ) : (
               <Button onClick={connectWallet}>Connect Wallet</Button>
