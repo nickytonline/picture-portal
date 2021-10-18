@@ -294,7 +294,7 @@ const Home: NextPage = () => {
     event.preventDefault;
 
     if (!message || message.length === 0) {
-      toast.error(
+      toast.warn(
         'You need to specify a message before requesting to view a picture',
       );
       return;
