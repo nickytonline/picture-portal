@@ -283,7 +283,7 @@ const Home: NextPage = () => {
 
     if (!message || message.length === 0) {
       toast.error(
-        'You need to specify a message before requesting to view art',
+        'You need to specify a message before requesting to view a picture',
       );
       return;
     }
