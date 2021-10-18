@@ -12,6 +12,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           placeItems: 'center',
           margin: '1rem',
           maxWidth: '70ch',
+          '@media screen and (max-width : 480px)': { maxWidth: '100vw' },
         }}
       >
         <Component {...pageProps} />{' '}
