@@ -2,7 +2,7 @@
 import type { NextPage } from 'next';
 // import Image from 'next/image'; Need to sort this one out
 import { keyframes } from '@emotion/react';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { ethers } from 'ethers';
 import abi from '../utils/WavePortal.json';
 import { ToastContainer, toast } from 'react-toastify';
@@ -212,7 +212,7 @@ const Home: NextPage = () => {
   /*
    * Create a method that gets all waves from your contract
    */
-  async function getArtRequests() {
+  const getArtRequests = useCallback(async () => {
     try {
       const { ethereum } = window;
 
@@ -275,7 +275,7 @@ const Home: NextPage = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  }, []);
 
   function getContract(ethereum: any) {
     const provider = new ethers.providers.Web3Provider(ethereum);
@@ -427,7 +427,7 @@ const Home: NextPage = () => {
     checkIfWalletIsConnected(ethereum);
     getArtRequests();
     document.querySelector('.Toastify')?.setAttribute('aria-live', 'polite');
-  }, []);
+  }, [getArtRequests]);
 
   return (
     <>
