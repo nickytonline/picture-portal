@@ -597,7 +597,7 @@ const Home: NextPage = () => {
               </a>
             </li>
             <li>
-              <a href="https://timeline.iamdeveloper.com">more about Nick</a>
+              <a href="https://timeline.iamdeveloper.com">about Nick</a>
             </li>
           </ul>
         </nav>
