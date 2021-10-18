@@ -251,7 +251,7 @@ const Home: NextPage = () => {
                 imageUrl,
               },
             ]);
-            toast(
+            toast.success(
               <>
                 <Button onClick={scrollToLastMessage}>Go to new message</Button>
               </>,
@@ -282,7 +282,9 @@ const Home: NextPage = () => {
     event.preventDefault;
 
     if (!message || message.length === 0) {
-      toast('You need to specify a message before requesting to view art');
+      toast.error(
+        'You need to specify a message before requesting to view art',
+      );
       return;
     }
 
@@ -307,7 +309,7 @@ const Home: NextPage = () => {
         await waveTxn.wait();
         setMiningStatus({ state: 'mined', transactionHash: waveTxn.hash });
       } else {
-        toast(MISSING_METAMASK_MESSAGE);
+        toast.error(MISSING_METAMASK_MESSAGE);
       }
     } catch (error: any) {
       if (
@@ -315,9 +317,11 @@ const Home: NextPage = () => {
           `MetaMask Tx Signature: User denied transaction signature.`,
         )
       ) {
-        toast('You changed your mind and did not request to see a picture. 😭');
+        toast.info(
+          'You changed your mind and did not request to see a picture. 😭',
+        );
       } else if (error.message.includes('execution reverted: Wait 15m')) {
-        toast(
+        toast.warn(
           `Please don't spam. You can send another message after 15 minutes.`,
         );
       } else if (
@@ -325,13 +329,13 @@ const Home: NextPage = () => {
           `Cannot estimate gas; transaction may fail or may require manual gas limit`,
         )
       ) {
-        toast(
+        toast.error(
           `Cannot estimate gas; transaction may fail or may require manual gas limit.`,
         );
       } else if (`Trying to withdraw more money than the contract has`) {
-        toast(`Trying to withdraw more money than the contract has`);
+        toast.error(`Trying to withdraw more money than the contract has`);
       } else {
-        toast('an unknown error occurred');
+        toast.error('an unknown error occurred');
         console.log(error);
       }
     } finally {
@@ -347,7 +351,7 @@ const Home: NextPage = () => {
       const { ethereum } = window;
 
       if (!ethereum) {
-        toast(MISSING_METAMASK_MESSAGE);
+        toast.error(MISSING_METAMASK_MESSAGE);
         return;
       }
 
@@ -357,7 +361,7 @@ const Home: NextPage = () => {
 
       setCurrentAccount(accounts[0]);
       getArtRequests();
-      toast(`Wallet ${accounts[0]} has been connected`);
+      toast.info(`Wallet ${accounts[0]} has been connected`);
     } catch (error: any) {
       console.log(error);
 
@@ -366,13 +370,13 @@ const Home: NextPage = () => {
           `Request of type 'wallet_requestPermissions' already pending`,
         )
       ) {
-        toast(
+        toast.info(
           `You've already requested to connect your Metamask wallet. Click on the Metamask wallet extension to bring it back to focus so you can connect your wallet.`,
         );
       } else if (error.message.includes(`User rejected the request.`)) {
-        toast(`That's so sad. You decided to not connect your wallet. 😭`);
+        toast.info(`That's so sad. You decided to not connect your wallet. 😭`);
       } else {
-        toast('An unknown error occurred');
+        toast.error('An unknown error occurred');
       }
     }
   }
@@ -389,7 +393,7 @@ const Home: NextPage = () => {
         console.log('Found an authorized account:', account);
         setCurrentAccount(account);
       } else {
-        toast(
+        toast.info(
           'No authorized account found. Connect your account in your Metamask wallet.',
         );
       }
@@ -405,7 +409,7 @@ const Home: NextPage = () => {
     const { ethereum } = window;
 
     if (!ethereum) {
-      toast(MISSING_METAMASK_MESSAGE);
+      toast.error(MISSING_METAMASK_MESSAGE);
       return;
     }
 
@@ -436,7 +440,7 @@ const Home: NextPage = () => {
         </h1>
       </header>
       <main>
-        <ToastContainer aria-live="polite" />
+        <ToastContainer aria-live="polite" position="top-right" theme="dark" />
         <p>
           <em>Hi! 👋</em> I&apos;m Nick. Connect your Metamask Ethereum wallet
           and request to see some pictures! (not purchase an NFT). Note that
