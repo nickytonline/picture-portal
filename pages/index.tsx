@@ -78,6 +78,10 @@ const httpStatusCodes = [
   '511',
 ];
 
+function isMobile() {
+  return navigator.userAgent.includes('Mobile');
+}
+
 declare global {
   namespace JSX {
     interface IntrinsicElements {
@@ -122,7 +126,13 @@ type MiningStatus =
     }
   | { state: 'none' };
 
-const MISSING_METAMASK_MESSAGE = `Missing the Metamask browser extension, or if on mobile, open the app in the Metamask app's browser.`;
+function getMissingMetamaskMessage() {
+  if (isMobile()) {
+    return `You are on a mobile device. To continue, open the Metamask application on your device and use the built-in browser to load the site.`;
+  } else {
+    return 'The Metamask browser extension was not detected. Unable to continue. Ensure the extenson is installed and enabled.';
+  }
+}
 
 function getMiningStyles(miningStatus: MiningStatus) {
   switch (miningStatus.state) {
@@ -309,7 +319,7 @@ const Home: NextPage = () => {
         await waveTxn.wait();
         setMiningStatus({ state: 'mined', transactionHash: waveTxn.hash });
       } else {
-        toast.error(MISSING_METAMASK_MESSAGE);
+        toast.error(getMissingMetamaskMessage());
       }
     } catch (error: any) {
       if (
@@ -351,7 +361,7 @@ const Home: NextPage = () => {
       const { ethereum } = window;
 
       if (!ethereum) {
-        toast.error(MISSING_METAMASK_MESSAGE);
+        toast.error(getMissingMetamaskMessage());
         return;
       }
 
@@ -409,7 +419,7 @@ const Home: NextPage = () => {
     const { ethereum } = window;
 
     if (!ethereum) {
-      toast.error(MISSING_METAMASK_MESSAGE);
+      toast.error(getMissingMetamaskMessage());
       return;
     }
 
