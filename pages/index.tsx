@@ -428,7 +428,7 @@ const Home: NextPage = () => {
     checkIfWalletIsConnected(ethereum);
     getArtRequests();
     document.querySelector('.Toastify')?.setAttribute('aria-live', 'polite');
-  }, []);
+  }, [getArtRequests]);
 
   return (
     <>
