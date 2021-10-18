@@ -291,7 +291,7 @@ const Home: NextPage = () => {
   }
 
   async function requestArt(event: any) {
-    event.preventDefault;
+    event.preventDefault();
 
     if (!message || message.length === 0) {
       toast.warn(
@@ -484,11 +484,7 @@ const Home: NextPage = () => {
               <Button onClick={connectWallet}>Connect Wallet</Button>
             )}
           </div>
-          <form
-            onSubmit={(event) => {
-              event?.preventDefault();
-            }}
-          >
+          <form>
             <input
               required={true}
               type="text"
