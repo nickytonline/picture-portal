@@ -320,6 +320,7 @@ const Home: NextPage = () => {
 
         await waveTxn.wait();
         setMiningStatus({ state: 'mined', transactionHash: waveTxn.hash });
+        setMessage('');
       } else {
         toast.error(getMissingMetamaskMessage());
       }
@@ -354,7 +355,6 @@ const Home: NextPage = () => {
       setTimeout(() => {
         setMiningStatus({ state: 'none' });
       }, 3000);
-      setMessage('');
     }
   }
 
