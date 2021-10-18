@@ -8,6 +8,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
+        <title>Welcome to the Picture Portal 📷</title>
+        <meta name="description" content="Welcome to the picture portal." />
+        <link rel="icon" href="/favicon.ico" />
         <meta
           property="og:site_name"
           content="Welcome to the picture portal 📷"

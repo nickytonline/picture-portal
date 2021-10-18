@@ -1,7 +1,6 @@
 // TODO: Break this apart lol.
 import type { NextPage } from 'next';
 // import Image from 'next/image'; Need to sort this one out
-import Head from 'next/head';
 import { keyframes } from '@emotion/react';
 import { useEffect, useState, useRef } from 'react';
 import { ethers } from 'ethers';
@@ -432,11 +431,6 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <title>Welcome to the Picture Portal 📷</title>
-        <meta name="description" content="Welcome to Web3" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <header sx={{ margin: '1rem 0' }}>
         <marquee
           sx={{
