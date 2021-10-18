@@ -415,6 +415,7 @@ const Home: NextPage = () => {
 
     checkIfWalletIsConnected(ethereum);
     getArtRequests();
+    document.querySelector('.Toastify')?.setAttribute('aria-live', 'polite');
   }, []);
 
   return (
@@ -440,7 +441,7 @@ const Home: NextPage = () => {
         </h1>
       </header>
       <main>
-        <ToastContainer aria-live="polite" position="top-right" theme="dark" />
+        <ToastContainer position="top-right" theme="dark" />
         <p>
           <em>Hi! 👋</em> I&apos;m Nick. Connect your Metamask Ethereum wallet
           and request to see some pictures! (not purchase an NFT). Note that
