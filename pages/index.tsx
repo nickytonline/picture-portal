@@ -83,24 +83,6 @@ function isMobile() {
   return navigator.userAgent.includes('Mobile');
 }
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      marquee: React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLMarqueeElement>,
-        HTMLMarqueeElement
-      >;
-    }
-  }
-}
-
-// Extend the window object.
-declare global {
-  interface Window {
-    ethereum: any; // TODO, type this out at some point.
-  }
-}
-
 const contractAddress = '0xD0F1A318b25149093bb1C8568B392970cA184631';
 const contractABI = abi.abi;
 
