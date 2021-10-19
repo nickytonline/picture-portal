@@ -13,7 +13,8 @@
     "prepare": "husky install",
     "storybook": "start-storybook -p 6006",
     "prebuild-storybook": "rimraf storybook-static",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "deploy-contract": "bin/deploy-contract.sh"
   },
   "dependencies": {
     "@apollo/client": "^3.4.15",
