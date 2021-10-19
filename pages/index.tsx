@@ -443,7 +443,6 @@ const Home: NextPage = () => {
                 padding: '1rem',
               },
               '& details': {
-                cursor: 'pointer',
                 display: 'flex',
                 flexDirection: 'column',
                 fontWeight: 500,
@@ -465,7 +464,7 @@ const Home: NextPage = () => {
               return (
                 <li key={index}>
                   <details {...otherProps}>
-                    <summary sx={{ userSelect: 'none' }}>
+                    <summary sx={{ userSelect: 'none', cursor: 'pointer' }}>
                       {artRequest.message}
                     </summary>
                     <p>Address: {artRequest.address}</p>
