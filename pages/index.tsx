@@ -264,7 +264,8 @@ const Home: NextPage = () => {
             ]);
             toast.success(
               <>
-                <Button onClick={scrollToLastMessage}>Go to new message</Button>
+                <span sx={{ margin: '0.5rem' }}>{message}</span>
+                <Button onClick={scrollToLastMessage}>View new message</Button>
               </>,
             );
           },
