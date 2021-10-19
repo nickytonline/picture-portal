@@ -192,7 +192,7 @@ const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({
 };
 
 const Home: NextPage = () => {
-  const [currentAccount, setCurrentAccount] = useState('');
+  const [currentAccount, setCurrentAccount] = useState<string | null>(null);
   const [message, setMessage] = useState('');
   const [artRequests, setAllArtRequests] = useState<any[]>([]);
   const [miningStatus, setMiningStatus] = useState<MiningStatus>({
@@ -370,9 +370,7 @@ const Home: NextPage = () => {
         method: 'eth_requestAccounts',
       });
 
-      setCurrentAccount(accounts[0]);
       getArtRequests();
-      toast.info(`Wallet ${accounts[0]} has been connected`);
     } catch (error: any) {
       console.log(error);
 
@@ -423,6 +421,20 @@ const Home: NextPage = () => {
       toast.error(getMissingMetamaskMessage());
       return;
     }
+
+    ethereum.on('accountsChanged', (accounts: Array<string>) => {
+      if (accounts.length === 0) {
+        setCurrentAccount(null);
+        toast.warn(
+          'No authorized account found. Connect your account in your Metamask wallet.',
+        );
+      } else {
+        // We're only interested in the first account for now
+        // to keep things simple
+        setCurrentAccount(accounts[0]);
+        toast.info(`Wallet ${accounts[0]} has been connected`);
+      }
+    });
 
     checkIfWalletIsConnected(ethereum);
     getArtRequests();
