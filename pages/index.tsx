@@ -254,7 +254,7 @@ const Home: NextPage = () => {
           `Cannot estimate gas; transaction may fail or may require manual gas limit.`,
         );
       } else if (`Trying to withdraw more money than the contract has`) {
-        toast.error(`Trying to withdraw more money than the contract has`);
+        toast.error(`Contract has no funds for prize! Message rejected.`);
       } else {
         toast.error('an unknown error occurred');
         console.log(error);
