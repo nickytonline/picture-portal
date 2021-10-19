@@ -13,7 +13,7 @@ function isMobile() {
   return navigator.userAgent.includes('Mobile');
 }
 
-const contractAddress = '0xD0F1A318b25149093bb1C8568B392970cA184631';
+const contractAddress = '0xD21B19220949b18F55c8BbfA78728a696f1202dc';
 const contractABI = abi.abi;
 
 const fadeInfadeOut = keyframes`
