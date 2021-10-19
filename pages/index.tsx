@@ -7,77 +7,7 @@ import { ethers } from 'ethers';
 import abi from '../utils/WavePortal.json';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-// Not all HTTP status codes have images on http.cat.
-const httpCatStatusCodes = [
-  '100',
-  '101',
-  '102',
-  '200',
-  '201',
-  '202',
-  '203',
-  '204',
-  '206',
-  '207',
-  '300',
-  '301',
-  '302',
-  '303',
-  '304',
-  '305',
-  '307',
-  '308',
-  '400',
-  '401',
-  '402',
-  '403',
-  '404',
-  '405',
-  '406',
-  '407',
-  '408',
-  '409',
-  '410',
-  '411',
-  '412',
-  '413',
-  '414',
-  '415',
-  '416',
-  '417',
-  '418',
-  '420',
-  '421',
-  '422',
-  '423',
-  '424',
-  '425',
-  '426',
-  '429',
-  '431',
-  '444',
-  '450',
-  '451',
-  '497',
-  '498',
-  '499',
-  '500',
-  '501',
-  '502',
-  '503',
-  '504',
-  '506',
-  '507',
-  '508',
-  '509',
-  '510',
-  '511',
-  '521',
-  '523',
-  '525',
-  '599',
-];
+import { getCatImageUrl } from '../utils/cats';
 
 function isMobile() {
   return navigator.userAgent.includes('Mobile');
@@ -288,11 +218,7 @@ const Home: NextPage = () => {
       if (ethereum) {
         const wavePortalContract = getContract(ethereum);
 
-        const imageUrl = `https://http.cat/${
-          httpCatStatusCodes[
-            Math.floor(Math.random() * httpCatStatusCodes.length - 1)
-          ]
-        }`;
+        const imageUrl = getCatImageUrl();
 
         /*
          * Execute the actual wave from your smart contract
