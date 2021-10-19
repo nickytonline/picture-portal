@@ -395,10 +395,9 @@ const Home: NextPage = () => {
       /*
        * Check if we're authorized to access the user's wallet
        */
-      const accounts = await ethereum.request({ method: 'eth_accounts' });
+      const [account] = await ethereum.request({ method: 'eth_accounts' });
 
-      if (accounts.length !== 0) {
-        const account = accounts[0];
+      if (account) {
         console.log('Found an authorized account:', account);
         setCurrentAccount(account);
       } else {
@@ -422,17 +421,17 @@ const Home: NextPage = () => {
       return;
     }
 
-    ethereum.on('accountsChanged', (accounts: Array<string>) => {
-      if (accounts.length === 0) {
+    ethereum.on('accountsChanged', ([account]: Array<string>) => {
+      if (account) {
+        // We're only interested in the first account for now
+        // to keep things simple
+        setCurrentAccount(account);
+        toast.info(`Wallet ${account} has been connected`);
+      } else {
         setCurrentAccount(null);
         toast.warn(
           'No authorized account found. Connect your account in your Metamask wallet.',
         );
-      } else {
-        // We're only interested in the first account for now
-        // to keep things simple
-        setCurrentAccount(accounts[0]);
-        toast.info(`Wallet ${accounts[0]} has been connected`);
       }
     });
 
