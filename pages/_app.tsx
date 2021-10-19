@@ -37,6 +37,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           content="A screengrab of part of the picture portal app"
         />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <ThemeProvider theme={defaultTheme}>
         <div
