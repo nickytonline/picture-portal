@@ -301,21 +301,15 @@ const Home: NextPage = () => {
 
   const checkIfWalletIsConnected = async (ethereum: any) => {
     try {
-      /*
-       * Check if we're authorized to access the user's wallet
-       */
       const [account] = await ethereum.request({ method: 'eth_accounts' });
 
       if (account) {
         console.log('Found an authorized account:', account);
         setCurrentAccount(account);
-      } else {
-        toast.info(
-          'No authorized account found. Connect your account in your Metamask wallet.',
-        );
       }
     } catch (error) {
-      console.log(error);
+      console.dir(error);
+      toast.error('An unknown error occurred connecting your account.');
     }
   };
 
