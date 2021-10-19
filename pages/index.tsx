@@ -482,7 +482,9 @@ const Home: NextPage = () => {
                     <Image
                       src={artRequest.imageUrl}
                       alt="Art for this request"
-                      layout="responsive"
+                      layout="fixed"
+                      width="375"
+                      height="300"
                     />
                   </details>
                 </li>
