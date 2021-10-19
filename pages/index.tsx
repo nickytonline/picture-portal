@@ -1,6 +1,6 @@
 // TODO: Break this apart lol.
 import type { NextPage } from 'next';
-// import Image from 'next/image'; Need to sort this one out
+import Image from 'next/image';
 import { keyframes } from '@emotion/react';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { ethers } from 'ethers';
@@ -479,7 +479,7 @@ const Home: NextPage = () => {
                     <time dateTime={artRequest.timestamp.toString()}>
                       {artRequest.timestamp.toString()}
                     </time>
-                    <img
+                    <Image
                       src={artRequest.imageUrl}
                       alt="Art for this request"
                       width="375"
