@@ -98,7 +98,7 @@ const EtherscanLink: React.FC<{ address: string }> = ({ address }) => {
   return (
     <a
       sx={{ color: 'lime' }}
-      href={`https://etherscan.io/address/${address}`}
+      href={`https://rinkeby.etherscan.io/address/${address}`}
       title={`${address} on etherscan.io`}
       target="_blank"
       rel="noopener noreferrer"
