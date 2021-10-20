@@ -49,6 +49,7 @@ const Image: typeof WrappedImage = ({
       alt={alt}
       width={width}
       height={height}
+      layout={layout}
       {...props}
       onError={(error) => {
         setImageUrl('https://http.cat/404');
