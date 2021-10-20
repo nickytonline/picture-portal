@@ -58,6 +58,56 @@ const Image: typeof WrappedImage = ({
   );
 };
 
+interface MessageRequest {
+  address: string;
+  message: string;
+  timestamp: { toString(): string };
+  imageUrl: string;
+}
+
+const MessageCard: React.FC<{
+  messageRequest: MessageRequest;
+  ref?: React.Ref<HTMLDetailsElement>;
+  id?: string;
+}> = ({ messageRequest, ref, id }) => {
+  const timeStamp: string = messageRequest.timestamp.toString();
+  return (
+    <details ref={ref} id={id}>
+      <summary sx={{ userSelect: 'none', cursor: 'pointer' }}>
+        {messageRequest.message}
+      </summary>
+      <p>
+        Sender: <EtherscanLink address={messageRequest.address} />
+      </p>
+      <p>
+        Sent:{' '}
+        <time dateTime={timeStamp}>{new Date(timeStamp).toLocaleString()}</time>
+      </p>
+      <Image
+        src={messageRequest.imageUrl}
+        alt="Art for this request"
+        layout="fixed"
+        width="375"
+        height="300"
+      />
+    </details>
+  );
+};
+
+const EtherscanLink: React.FC<{ address: string }> = ({ address }) => {
+  return (
+    <a
+      sx={{ color: 'lime' }}
+      href={`https://etherscan.io/address/${address}`}
+      title={`${address} on etherscan.io`}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {address}
+    </a>
+  );
+};
+
 const Miner: React.FC<{ transactionId: string }> = ({ transactionId }) => {
   return (
     <>
@@ -390,16 +440,7 @@ const Home: NextPage = () => {
                   marginRight: '0.5rem',
                 }}
               >
-                Account:{' '}
-                <a
-                  sx={{ color: 'lime' }}
-                  href={`https://etherscan.io/address/${currentAccount}`}
-                  title={`${currentAccount} account on etherscan.io`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {currentAccount}
-                </a>
+                Account: <EtherscanLink address={currentAccount} />
               </span>
             ) : (
               <Button onClick={connectWallet}>Connect Wallet</Button>
@@ -447,30 +488,20 @@ const Home: NextPage = () => {
               },
             }}
           >
-            {artRequests.map((artRequest: any, index, items) => {
+            {artRequests.map((messageRequest: MessageRequest, index, items) => {
               const otherProps =
                 index === items.length - 1
-                  ? { ref: lastMessageRef, id: `message${index}` }
+                  ? {
+                      ref: lastMessageRef,
+                      id: `message${index}`,
+                    }
                   : {};
               return (
                 <li key={index}>
-                  <details {...otherProps}>
-                    <summary sx={{ userSelect: 'none', cursor: 'pointer' }}>
-                      {artRequest.message}
-                    </summary>
-                    <p>Address: {artRequest.address}</p>
-                    <p>Message: {artRequest.message}</p>
-                    <time dateTime={artRequest.timestamp.toString()}>
-                      {artRequest.timestamp.toString()}
-                    </time>
-                    <Image
-                      src={artRequest.imageUrl}
-                      alt="Art for this request"
-                      layout="fixed"
-                      width="375"
-                      height="300"
-                    />
-                  </details>
+                  <MessageCard
+                    messageRequest={messageRequest}
+                    {...otherProps}
+                  />
                 </li>
               );
             })}
