@@ -1,6 +1,6 @@
 // TODO: Break this apart lol.
 import type { NextPage } from 'next';
-import Image from 'next/image';
+import WrappedImage from 'next/image';
 import { keyframes } from '@emotion/react';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { ethers } from 'ethers';
@@ -79,6 +79,30 @@ function getMiningMessage(miningStatus: MiningStatus) {
       '';
   }
 }
+
+const Image: typeof WrappedImage = ({
+  src,
+  alt,
+  width,
+  height,
+  layout,
+  ...props
+}) => {
+  const [imageUrl, setImageUrl] = useState(src);
+
+  return (
+    <WrappedImage
+      src={imageUrl}
+      alt={alt}
+      width={width}
+      height={height}
+      {...props}
+      onError={(error) => {
+        setImageUrl('https://http.cat/404');
+      }}
+    />
+  );
+};
 
 // TODO: Improve this.
 const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({
