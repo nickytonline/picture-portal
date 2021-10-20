@@ -25,58 +25,11 @@ const fadeInfadeOut = keyframes`
   }
 `;
 
-const web3Styles = {
-  opacity: 1,
-  '@media screen and (prefers-reduced-motion: no-preference)': {
-    animation: `${fadeInfadeOut} 2.5s ease-in-out infinite`,
-  },
-};
-
-type MiningStatus =
-  | {
-      state: 'mining' | 'mined';
-      transactionHash: string;
-    }
-  | { state: 'none' };
-
 function getMissingMetamaskMessage() {
   if (isMobile()) {
     return `You are on a mobile device. To continue, open the Metamask application on your device and use the built-in browser to load the site.`;
   } else {
     return 'The Metamask browser extension was not detected. Unable to continue. Ensure the extenson is installed and enabled.';
-  }
-}
-
-function getMiningStyles(miningStatus: MiningStatus) {
-  switch (miningStatus.state) {
-    case 'mining':
-      return {
-        ...web3Styles,
-        marginRight: '0.5rem',
-      };
-    case 'mined': {
-      return {
-        marginRight: '0.5rem',
-      };
-    }
-    case 'none': {
-      return { display: 'none' };
-    }
-  }
-}
-
-function getMiningMessage(miningStatus: MiningStatus) {
-  const { state } = miningStatus;
-  console.dir(miningStatus);
-
-  switch (state) {
-    case 'mining':
-      return `Mining transaction`;
-    case 'mined': {
-      return `Transaction has been mined`;
-    }
-    case 'none':
-      '';
   }
 }
 
@@ -101,6 +54,26 @@ const Image: typeof WrappedImage = ({
         setImageUrl('https://http.cat/404');
       }}
     />
+  );
+};
+
+const Miner: React.FC<{ transactionId: string }> = ({ transactionId }) => {
+  return (
+    <>
+      <span
+        aria-hidden="true"
+        sx={{
+          opacity: 1,
+          '@media screen and (prefers-reduced-motion: no-preference)': {
+            animation: `${fadeInfadeOut} 2.5s ease-in-out infinite`,
+          },
+          marginRight: '0.75rem',
+        }}
+      >
+        💎
+      </span>
+      {`Mining transaction ${transactionId}`}
+    </>
   );
 };
 
@@ -131,10 +104,58 @@ const Home: NextPage = () => {
   const [currentAccount, setCurrentAccount] = useState<string | null>(null);
   const [message, setMessage] = useState('');
   const [artRequests, setAllArtRequests] = useState<any[]>([]);
-  const [miningStatus, setMiningStatus] = useState<MiningStatus>({
-    state: 'none',
-  });
   const lastMessageRef = useRef<HTMLDetailsElement>(null);
+
+  async function mineTransaction(
+    contract: ethers.Contract,
+    message: string,
+  ): Promise<void> {
+    let transactionId: string | undefined;
+
+    try {
+      const imageUrl = getCatImageUrl();
+      const transaction = await contract.askForArt(message, imageUrl);
+      transactionId = transaction.hash;
+
+      toast.info(<Miner transactionId={transaction.hash} />, {
+        toastId: transaction.hash,
+        autoClose: false,
+      });
+
+      await transaction.wait();
+    } catch (error: any) {
+      if (
+        error.message.includes(
+          `MetaMask Tx Signature: User denied transaction signature.`,
+        )
+      ) {
+        toast.info(
+          'You changed your mind and did not request to see a picture. 😭',
+        );
+      } else if (error.message.includes('execution reverted: Wait 15m')) {
+        toast.warn(
+          `Please don't spam. You can send another message after 15 minutes.`,
+        );
+      } else if (
+        error.message.includes(
+          `Cannot estimate gas; transaction may fail or may require manual gas limit`,
+        )
+      ) {
+        toast.error(
+          `Cannot estimate gas; transaction may fail or may require manual gas limit.`,
+        );
+      } else if (`Trying to withdraw more money than the contract has`) {
+        toast.error(`Contract has no funds for prize! Message rejected.`);
+      } else {
+        toast.error('an unknown error occurred');
+        console.log(error);
+      }
+    } finally {
+      if (transactionId != null) {
+        toast.dismiss(transactionId);
+      }
+    }
+  }
 
   function scrollToLastMessage() {
     const { current: lastMessage } = lastMessageRef;
@@ -198,6 +219,7 @@ const Home: NextPage = () => {
                 imageUrl,
               },
             ]);
+
             toast.success(
               <>
                 <span sx={{ margin: '0.5rem' }}>{message}</span>
@@ -229,6 +251,13 @@ const Home: NextPage = () => {
   async function requestArt(event: any) {
     event.preventDefault();
 
+    const { ethereum } = window;
+
+    if (!ethereum) {
+      toast.error(getMissingMetamaskMessage());
+      return;
+    }
+
     if (!message || message.length === 0) {
       toast.warn(
         'You need to specify a message before requesting to view a picture',
@@ -236,58 +265,8 @@ const Home: NextPage = () => {
       return;
     }
 
-    try {
-      const { ethereum } = window;
-
-      if (ethereum) {
-        const wavePortalContract = getContract(ethereum);
-
-        const imageUrl = getCatImageUrl();
-
-        /*
-         * Execute the actual wave from your smart contract
-         */
-        const waveTxn = await wavePortalContract.askForArt(message, imageUrl);
-        setMiningStatus({ state: 'mining', transactionHash: waveTxn.hash });
-
-        await waveTxn.wait();
-        setMiningStatus({ state: 'mined', transactionHash: waveTxn.hash });
-        setMessage('');
-      } else {
-        toast.error(getMissingMetamaskMessage());
-      }
-    } catch (error: any) {
-      if (
-        error.message.includes(
-          `MetaMask Tx Signature: User denied transaction signature.`,
-        )
-      ) {
-        toast.info(
-          'You changed your mind and did not request to see a picture. 😭',
-        );
-      } else if (error.message.includes('execution reverted: Wait 15m')) {
-        toast.warn(
-          `Please don't spam. You can send another message after 15 minutes.`,
-        );
-      } else if (
-        error.message.includes(
-          `Cannot estimate gas; transaction may fail or may require manual gas limit`,
-        )
-      ) {
-        toast.error(
-          `Cannot estimate gas; transaction may fail or may require manual gas limit.`,
-        );
-      } else if (`Trying to withdraw more money than the contract has`) {
-        toast.error(`Contract has no funds for prize! Message rejected.`);
-      } else {
-        toast.error('an unknown error occurred');
-        console.log(error);
-      }
-    } finally {
-      setTimeout(() => {
-        setMiningStatus({ state: 'none' });
-      }, 3000);
-    }
+    const contract = getContract(ethereum);
+    mineTransaction(contract, message);
   }
 
   async function connectWallet() {
@@ -438,19 +417,6 @@ const Home: NextPage = () => {
               Send message
             </Button>
           </form>
-        </div>
-        <div
-          aria-live="polite"
-          sx={{ height: '2rem', color: 'darkgreen', fontWeight: 700 }}
-        >
-          {miningStatus.state !== 'none' && (
-            <>
-              <span aria-hidden="true" sx={getMiningStyles(miningStatus)}>
-                💎
-              </span>
-              {getMiningMessage(miningStatus)}
-            </>
-          )}
         </div>
 
         {artRequests.length > 0 && (
