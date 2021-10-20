@@ -72,7 +72,7 @@ const httpCatStatusCodes = [
 export function getCatImageUrl() {
   return `https://http.cat/${
     httpCatStatusCodes[
-      Math.floor(Math.random() * httpCatStatusCodes.length - 1)
+      Math.floor(Math.random() * (httpCatStatusCodes.length - 1))
     ]
   }`;
 }
