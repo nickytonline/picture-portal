@@ -7,6 +7,7 @@
     "": {
       "name": "picture-portal",
       "version": "1.1.0",
+      "hasInstallScript": true,
       "dependencies": {
         "@apollo/client": "^3.4.15",
         "@nomiclabs/hardhat-ethers": "^2.0.2",
@@ -17,6 +18,7 @@
         "next": "11.1.2",
         "react": "17.0.2",
         "react-dom": "17.0.2",
+        "react-toastify": "^8.0.3",
         "theme-ui": "^0.11.3"
       },
       "devDependencies": {
@@ -30,6 +32,7 @@
         "@storybook/react": "^6.3.12",
         "@types/jest": "^27.0.2",
         "@types/react": "17.0.26",
+        "@types/react-toastify": "^4.1.0",
         "babel-loader": "^8.2.2",
         "chai": "^4.3.4",
         "commitizen": "^4.2.4",
@@ -8494,6 +8497,16 @@
         "@types/react": "*"
       }
     },
+    "node_modules/@types/react-toastify": {
+      "version": "4.1.0",
+      "resolved": "https://registry.npmjs.org/@types/react-toastify/-/react-toastify-4.1.0.tgz",
+      "integrity": "sha512-u7Ie/7LHBsPVz/iJxi/WlRDS7Gh9csCJACTDXx+pSLuZCm94xpkwzhM3jV1L5ZxP/in0Gp2tFbJ91VrSGr1gyQ==",
+      "deprecated": "This is a stub types definition. react-toastify provides its own type definitions, so you do not need this installed.",
+      "dev": true,
+      "dependencies": {
+        "react-toastify": "*"
+      }
+    },
     "node_modules/@types/react/node_modules/csstype": {
       "version": "3.0.9",
       "resolved": "https://registry.npmjs.org/csstype/-/csstype-3.0.9.tgz",
@@ -11511,7 +11524,6 @@
       "version": "1.1.1",
       "resolved": "https://registry.npmjs.org/clsx/-/clsx-1.1.1.tgz",
       "integrity": "sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==",
-      "dev": true,
       "engines": {
         "node": ">=6"
       }
@@ -29788,6 +29800,18 @@
         "react": "^16.8.0 || ^17.0.0"
       }
     },
+    "node_modules/react-toastify": {
+      "version": "8.0.3",
+      "resolved": "https://registry.npmjs.org/react-toastify/-/react-toastify-8.0.3.tgz",
+      "integrity": "sha512-rv3koC7f9lKKSkdpYgo/TGzgWlrB/aaiUInF1DyV7BpiM4kyTs+uhu6/r8XDMtBY2FOIHK+FlK3Iv7OzpA/tCA==",
+      "dependencies": {
+        "clsx": "^1.1.1"
+      },
+      "peerDependencies": {
+        "react": ">=16",
+        "react-dom": ">=16"
+      }
+    },
     "node_modules/read-pkg": {
       "version": "5.2.0",
       "resolved": "https://registry.npmjs.org/read-pkg/-/read-pkg-5.2.0.tgz",
@@ -42058,6 +42082,15 @@
         "@types/react": "*"
       }
     },
+    "@types/react-toastify": {
+      "version": "4.1.0",
+      "resolved": "https://registry.npmjs.org/@types/react-toastify/-/react-toastify-4.1.0.tgz",
+      "integrity": "sha512-u7Ie/7LHBsPVz/iJxi/WlRDS7Gh9csCJACTDXx+pSLuZCm94xpkwzhM3jV1L5ZxP/in0Gp2tFbJ91VrSGr1gyQ==",
+      "dev": true,
+      "requires": {
+        "react-toastify": "*"
+      }
+    },
     "@types/retry": {
       "version": "0.12.1",
       "resolved": "https://registry.npmjs.org/@types/retry/-/retry-0.12.1.tgz",
@@ -44485,8 +44518,7 @@
     "clsx": {
       "version": "1.1.1",
       "resolved": "https://registry.npmjs.org/clsx/-/clsx-1.1.1.tgz",
-      "integrity": "sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==",
-      "dev": true
+      "integrity": "sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA=="
     },
     "co": {
       "version": "4.6.0",
@@ -58549,6 +58581,14 @@
         "@babel/runtime": "^7.10.2",
         "use-composed-ref": "^1.0.0",
         "use-latest": "^1.0.0"
+      }
+    },
+    "react-toastify": {
+      "version": "8.0.3",
+      "resolved": "https://registry.npmjs.org/react-toastify/-/react-toastify-8.0.3.tgz",
+      "integrity": "sha512-rv3koC7f9lKKSkdpYgo/TGzgWlrB/aaiUInF1DyV7BpiM4kyTs+uhu6/r8XDMtBY2FOIHK+FlK3Iv7OzpA/tCA==",
+      "requires": {
+        "clsx": "^1.1.1"
       }
     },
     "read-pkg": {

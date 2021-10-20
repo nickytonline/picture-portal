@@ -1,100 +1,19 @@
 // TODO: Break this apart lol.
 import type { NextPage } from 'next';
-// import Image from 'next/image'; Need to sort this one out
-import Head from 'next/head';
+import WrappedImage from 'next/image';
 import { keyframes } from '@emotion/react';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { ethers } from 'ethers';
 import abi from '../utils/WavePortal.json';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { getCatImageUrl } from '../utils/cats';
 
-const httpStatusCodes = [
-  '100',
-  '101',
-  '102',
-  '103',
-  '200',
-  '201',
-  '202',
-  '203',
-  '204',
-  '205',
-  '206',
-  '207',
-  '208',
-  '226',
-  '300',
-  '301',
-  '302',
-  '303',
-  '304',
-  '305',
-  '306',
-  '307',
-  '308',
-  '400',
-  '401',
-  '402',
-  '403',
-  '404',
-  '405',
-  '406',
-  '407',
-  '408',
-  '409',
-  '410',
-  '411',
-  '412',
-  '413',
-  '414',
-  '415',
-  '416',
-  '417',
-  '418',
-  '421',
-  '422',
-  '423',
-  '424',
-  '425',
-  '426',
-  '427',
-  '428',
-  '429',
-  '430',
-  '431',
-  '451',
-  '500',
-  '501',
-  '502',
-  '503',
-  '504',
-  '505',
-  '506',
-  '507',
-  '508',
-  '509',
-  '510',
-  '511',
-];
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      marquee: React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLMarqueeElement>,
-        HTMLMarqueeElement
-      >;
-    }
-  }
+function isMobile() {
+  return navigator.userAgent.includes('Mobile');
 }
 
-// Extend the window object.
-declare global {
-  interface Window {
-    ethereum: any; // TODO, type this out at some point.
-  }
-}
-
-const contractAddress = '0xD0F1A318b25149093bb1C8568B392970cA184631';
+const contractAddress = '0xD21B19220949b18F55c8BbfA78728a696f1202dc';
 const contractABI = abi.abi;
 
 const fadeInfadeOut = keyframes`
@@ -106,54 +25,57 @@ const fadeInfadeOut = keyframes`
   }
 `;
 
-const web3Styles = {
-  opacity: 1,
-  '@media screen and (prefers-reduced-motion: no-preference)': {
-    animation: `${fadeInfadeOut} 2.5s ease-in-out infinite`,
-  },
+function getMissingMetamaskMessage() {
+  if (isMobile()) {
+    return `You are on a mobile device. To continue, open the Metamask application on your device and use the built-in browser to load the site.`;
+  } else {
+    return 'The Metamask browser extension was not detected. Unable to continue. Ensure the extenson is installed and enabled.';
+  }
+}
+
+const Image: typeof WrappedImage = ({
+  src,
+  alt,
+  width,
+  height,
+  layout,
+  ...props
+}) => {
+  const [imageUrl, setImageUrl] = useState(src);
+
+  return (
+    <WrappedImage
+      src={imageUrl}
+      alt={alt}
+      width={width}
+      height={height}
+      {...props}
+      onError={(error) => {
+        setImageUrl('https://http.cat/404');
+      }}
+    />
+  );
 };
 
-type MiningStatus =
-  | {
-      state: 'mining' | 'mined';
-      transactionHash: string;
-    }
-  | { state: 'none' };
-
-const MISSING_METAMASK_MESSAGE = `Missing the Metamask browser extension, or if on mobile, open the app in the Metamask app's browser.`;
-
-function getMiningStyles(miningStatus: MiningStatus) {
-  switch (miningStatus.state) {
-    case 'mining':
-      return {
-        ...web3Styles,
-        marginRight: '0.5rem',
-      };
-    case 'mined': {
-      return {
-        marginRight: '0.5rem',
-      };
-    }
-    case 'none': {
-      return { display: 'none' };
-    }
-  }
-}
-
-function getMiningMessage(miningStatus: MiningStatus) {
-  const { state } = miningStatus;
-  console.dir(miningStatus);
-
-  switch (state) {
-    case 'mining':
-      return `Mining transaction`;
-    case 'mined': {
-      return `Transaction has been mined`;
-    }
-    case 'none':
-      '';
-  }
-}
+const Miner: React.FC<{ transactionId: string }> = ({ transactionId }) => {
+  return (
+    <>
+      <span
+        aria-hidden="true"
+        sx={{
+          opacity: 1,
+          '@media screen and (prefers-reduced-motion: no-preference)': {
+            animation: `${fadeInfadeOut} 2.5s ease-in-out infinite`,
+          },
+          marginRight: '0.75rem',
+        }}
+      >
+        💎
+      </span>
+      {`Mining transaction ${transactionId}`}
+    </>
+  );
+};
 
 // TODO: Improve this.
 const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({
@@ -171,6 +93,7 @@ const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({
         border: 'none',
         padding: '0.25rem 0.5rem',
       }}
+      onClick={onClick}
     >
       {children}
     </button>
@@ -178,16 +101,61 @@ const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({
 };
 
 const Home: NextPage = () => {
-  const [currentAccount, setCurrentAccount] = useState('');
-  const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  const [currentAccount, setCurrentAccount] = useState<string | null>(null);
   const [message, setMessage] = useState('');
-  const [newMessage, setNewMessage] = useState('');
   const [artRequests, setAllArtRequests] = useState<any[]>([]);
-  const [miningStatus, setMiningStatus] = useState<MiningStatus>({
-    state: 'none',
-  });
   const lastMessageRef = useRef<HTMLDetailsElement>(null);
+
+  async function mineTransaction(
+    contract: ethers.Contract,
+    message: string,
+  ): Promise<void> {
+    let transactionId: string | undefined;
+
+    try {
+      const imageUrl = getCatImageUrl();
+      const transaction = await contract.askForArt(message, imageUrl);
+      transactionId = transaction.hash;
+
+      toast.info(<Miner transactionId={transaction.hash} />, {
+        toastId: transaction.hash,
+        autoClose: false,
+      });
+
+      await transaction.wait();
+    } catch (error: any) {
+      if (
+        error.message.includes(
+          `MetaMask Tx Signature: User denied transaction signature.`,
+        )
+      ) {
+        toast.info(
+          'You changed your mind and did not request to see a picture. 😭',
+        );
+      } else if (error.message.includes('execution reverted: Wait 15m')) {
+        toast.warn(
+          `Please don't spam. You can send another message after 15 minutes.`,
+        );
+      } else if (
+        error.message.includes(
+          `Cannot estimate gas; transaction may fail or may require manual gas limit`,
+        )
+      ) {
+        toast.error(
+          `Cannot estimate gas; transaction may fail or may require manual gas limit.`,
+        );
+      } else if (`Trying to withdraw more money than the contract has`) {
+        toast.error(`Contract has no funds for prize! Message rejected.`);
+      } else {
+        toast.error('an unknown error occurred');
+        console.log(error);
+      }
+    } finally {
+      if (transactionId != null) {
+        toast.dismiss(transactionId);
+      }
+    }
+  }
 
   function scrollToLastMessage() {
     const { current: lastMessage } = lastMessageRef;
@@ -201,7 +169,7 @@ const Home: NextPage = () => {
   /*
    * Create a method that gets all waves from your contract
    */
-  async function getArtRequests() {
+  const getArtRequests = useCallback(async () => {
     try {
       const { ethereum } = window;
 
@@ -251,7 +219,13 @@ const Home: NextPage = () => {
                 imageUrl,
               },
             ]);
-            setNewMessage(message);
+
+            toast.success(
+              <>
+                <span sx={{ margin: '0.5rem' }}>{message}</span>
+                <Button onClick={scrollToLastMessage}>View new message</Button>
+              </>,
+            );
           },
         );
       } else {
@@ -260,12 +234,7 @@ const Home: NextPage = () => {
     } catch (error) {
       console.log(error);
     }
-  }
-
-  function intializeErrorMessaging() {
-    setError('');
-    setSuccessMessage('');
-  }
+  }, []);
 
   function getContract(ethereum: any) {
     const provider = new ethers.providers.Web3Provider(ethereum);
@@ -280,84 +249,32 @@ const Home: NextPage = () => {
   }
 
   async function requestArt(event: any) {
-    event.preventDefault;
+    event.preventDefault();
 
-    intializeErrorMessaging();
+    const { ethereum } = window;
 
-    if (!message || message.length === 0) {
-      setError('You need to specify a message before requesting to view art');
-      setTimeout(() => {
-        setError('');
-      }, 3000);
+    if (!ethereum) {
+      toast.error(getMissingMetamaskMessage());
       return;
     }
 
-    try {
-      const { ethereum } = window;
-
-      if (ethereum) {
-        const wavePortalContract = getContract(ethereum);
-
-        const imageUrl = `https://http.cat/${
-          httpStatusCodes[
-            Math.floor(Math.random() * httpStatusCodes.length - 1)
-          ]
-        }`;
-
-        /*
-         * Execute the actual wave from your smart contract
-         */
-        const waveTxn = await wavePortalContract.askForArt(message, imageUrl);
-        setMiningStatus({ state: 'mining', transactionHash: waveTxn.hash });
-
-        await waveTxn.wait();
-        setMiningStatus({ state: 'mined', transactionHash: waveTxn.hash });
-      } else {
-        setError(MISSING_METAMASK_MESSAGE);
-      }
-    } catch (error: any) {
-      if (
-        error.message.includes(
-          `MetaMask Tx Signature: User denied transaction signature.`,
-        )
-      ) {
-        setError(
-          'You changed your mind and did not request to see a picture. 😭',
-        );
-      } else if (error.message.includes('execution reverted: Wait 15m')) {
-        setError(
-          `Please don't spam. You can send another message after 15 minutes.`,
-        );
-      } else if (
-        error.message.includes(
-          `Cannot estimate gas; transaction may fail or may require manual gas limit`,
-        )
-      ) {
-        setError(
-          `Cannot estimate gas; transaction may fail or may require manual gas limit.`,
-        );
-      } else if (`Trying to withdraw more money than the contract has`) {
-        setError(`Trying to withdraw more money than the contract has`);
-      } else {
-        setError('an unknown error occurred');
-        console.log(error);
-      }
-    } finally {
-      setTimeout(() => {
-        setMiningStatus({ state: 'none' });
-      }, 3000);
-      setMessage('');
+    if (!message || message.length === 0) {
+      toast.warn(
+        'You need to specify a message before requesting to view a picture',
+      );
+      return;
     }
+
+    const contract = getContract(ethereum);
+    mineTransaction(contract, message);
   }
 
   async function connectWallet() {
-    intializeErrorMessaging();
-
     try {
       const { ethereum } = window;
 
       if (!ethereum) {
-        setError(MISSING_METAMASK_MESSAGE);
+        toast.error(getMissingMetamaskMessage());
         return;
       }
 
@@ -365,13 +282,7 @@ const Home: NextPage = () => {
         method: 'eth_requestAccounts',
       });
 
-      setCurrentAccount(accounts[0]);
       getArtRequests();
-      setError('');
-      setSuccessMessage(`Wallet ${accounts[0]} has been connected`);
-      setTimeout(() => {
-        setSuccessMessage('');
-      }, 3000);
     } catch (error: any) {
       console.log(error);
 
@@ -380,35 +291,28 @@ const Home: NextPage = () => {
           `Request of type 'wallet_requestPermissions' already pending`,
         )
       ) {
-        setError(
+        toast.info(
           `You've already requested to connect your Metamask wallet. Click on the Metamask wallet extension to bring it back to focus so you can connect your wallet.`,
         );
       } else if (error.message.includes(`User rejected the request.`)) {
-        setError(`That's so sad. You decided to not connect your wallet. 😭`);
+        toast.info(`That's so sad. You decided to not connect your wallet. 😭`);
       } else {
-        setError('An unknown error occurred');
+        toast.error('An unknown error occurred');
       }
     }
   }
 
   const checkIfWalletIsConnected = async (ethereum: any) => {
     try {
-      /*
-       * Check if we're authorized to access the user's wallet
-       */
-      const accounts = await ethereum.request({ method: 'eth_accounts' });
+      const [account] = await ethereum.request({ method: 'eth_accounts' });
 
-      if (accounts.length !== 0) {
-        const account = accounts[0];
+      if (account) {
         console.log('Found an authorized account:', account);
         setCurrentAccount(account);
-      } else {
-        setError(
-          'No authorized account found. Connect your account in your Metamask wallet.',
-        );
       }
     } catch (error) {
-      console.log(error);
+      console.dir(error);
+      toast.error('An unknown error occurred connecting your account.');
     }
   };
 
@@ -419,21 +323,31 @@ const Home: NextPage = () => {
     const { ethereum } = window;
 
     if (!ethereum) {
-      setError(MISSING_METAMASK_MESSAGE);
+      toast.error(getMissingMetamaskMessage());
       return;
     }
 
+    ethereum.on('accountsChanged', ([account]: Array<string>) => {
+      if (account) {
+        // We're only interested in the first account for now
+        // to keep things simple
+        setCurrentAccount(account);
+        toast.info(`Wallet ${account} has been connected`);
+      } else {
+        setCurrentAccount(null);
+        toast.warn(
+          'No authorized account found. Connect your account in your Metamask wallet.',
+        );
+      }
+    });
+
     checkIfWalletIsConnected(ethereum);
     getArtRequests();
-  }, []);
+    document.querySelector('.Toastify')?.setAttribute('aria-live', 'polite');
+  }, [getArtRequests]);
 
   return (
     <>
-      <Head>
-        <title>Welcome to the Picture Portal 📷</title>
-        <meta name="description" content="Welcome to Web3" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <header sx={{ margin: '1rem 0' }}>
         <marquee
           sx={{
@@ -450,6 +364,7 @@ const Home: NextPage = () => {
         </h1>
       </header>
       <main>
+        <ToastContainer position="top-right" theme="dark" />
         <p>
           <em>Hi! 👋</em> I&apos;m Nick. Connect your Metamask Ethereum wallet
           and request to see some pictures! (not purchase an NFT). Note that
@@ -467,24 +382,29 @@ const Home: NextPage = () => {
               <span
                 sx={{
                   background: '#000',
-                  color: 'lime',
+                  color: '#fff',
                   fontWeight: 500,
                   padding: '0.5rem',
                   borderRadius: '0.5rem',
                   marginRight: '0.5rem',
                 }}
               >
-                Account: {currentAccount}
+                Account:{' '}
+                <a
+                  sx={{ color: 'lime' }}
+                  href={`https://etherscan.io/address/${currentAccount}`}
+                  title={`${currentAccount} account on etherscan.io`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {currentAccount}
+                </a>
               </span>
             ) : (
               <Button onClick={connectWallet}>Connect Wallet</Button>
             )}
           </div>
-          <form
-            onSubmit={(event) => {
-              event?.preventDefault();
-            }}
-          >
+          <form>
             <input
               required={true}
               type="text"
@@ -493,34 +413,10 @@ const Home: NextPage = () => {
               onChange={(e) => setMessage(e.target.value)}
               sx={{ marginRight: '0.5rem' }}
             />
-            <Button onClick={requestArt}>Send message</Button>
+            <Button type="submit" onClick={requestArt}>
+              Send message
+            </Button>
           </form>
-        </div>
-        <div sx={{ height: '2rem' }}>
-          {newMessage && (
-            <div aria-live="polite" sx={{ fontWeight: 700 }}>
-              <span sx={{ marginRight: '0.5rem' }}>{newMessage}</span>
-              <Button onClick={scrollToLastMessage}>Go to new message</Button>
-            </div>
-          )}
-          {error && (
-            <p aria-live="assertive" sx={{ color: 'darkred', fontWeight: 700 }}>
-              {error}
-            </p>
-          )}
-          {successMessage && (
-            <p aria-live="polite" sx={{ color: 'darkgreen', fontWeight: 700 }}>
-              {successMessage}
-            </p>
-          )}
-          {miningStatus.state !== 'none' && (
-            <p aria-live="polite" sx={{ color: 'darkgreen', fontWeight: 700 }}>
-              <span aria-hidden="true" sx={getMiningStyles(miningStatus)}>
-                💎
-              </span>
-              {getMiningMessage(miningStatus)}
-            </p>
-          )}
         </div>
 
         {artRequests.length > 0 && (
@@ -537,7 +433,6 @@ const Home: NextPage = () => {
                 padding: '1rem',
               },
               '& details': {
-                cursor: 'pointer',
                 display: 'flex',
                 flexDirection: 'column',
                 fontWeight: 500,
@@ -559,7 +454,7 @@ const Home: NextPage = () => {
               return (
                 <li key={index}>
                   <details {...otherProps}>
-                    <summary sx={{ userSelect: 'none' }}>
+                    <summary sx={{ userSelect: 'none', cursor: 'pointer' }}>
                       {artRequest.message}
                     </summary>
                     <p>Address: {artRequest.address}</p>
@@ -567,9 +462,10 @@ const Home: NextPage = () => {
                     <time dateTime={artRequest.timestamp.toString()}>
                       {artRequest.timestamp.toString()}
                     </time>
-                    <img
+                    <Image
                       src={artRequest.imageUrl}
                       alt="Art for this request"
+                      layout="fixed"
                       width="375"
                       height="300"
                     />
@@ -599,7 +495,7 @@ const Home: NextPage = () => {
               </a>
             </li>
             <li>
-              <a href="https://timeline.iamdeveloper.com">more about Nick</a>
+              <a href="https://timeline.iamdeveloper.com">about Nick</a>
             </li>
           </ul>
         </nav>

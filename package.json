@@ -23,7 +23,8 @@
     "build-storybook": "build-storybook",
     "push": "cz",
     "preinstall": "npx @open-sauced/check-engines",
-    "prestart": "npx @open-sauced/check-engines"
+    "prestart": "npx @open-sauced/check-engines",
+    "deploy-contract": "bin/deploy-contract.sh"
   },
   "dependencies": {
     "@apollo/client": "^3.4.15",
@@ -35,6 +36,7 @@
     "next": "11.1.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-toastify": "^8.0.3",
     "theme-ui": "^0.11.3"
   },
   "devDependencies": {
@@ -48,6 +50,7 @@
     "@storybook/react": "^6.3.12",
     "@types/jest": "^27.0.2",
     "@types/react": "17.0.26",
+    "@types/react-toastify": "^4.1.0",
     "babel-loader": "^8.2.2",
     "chai": "^4.3.4",
     "commitizen": "^4.2.4",
