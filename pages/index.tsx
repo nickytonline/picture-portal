@@ -408,7 +408,9 @@ const Home: NextPage = () => {
             padding: '0.5rem',
           }}
         >
-          {artRequests.length} picture requests! 💥
+          {currentAccount
+            ? `${artRequests.length} picture requests 👏🏻`
+            : 'Connect your wallet 😎'}
         </marquee>
         <h1 sx={{ fontFamily: 'heading' }}>
           Welcome to the <span sx={{ color: 'accent' }}>picture portal 📷</span>
