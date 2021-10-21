@@ -1,4 +1,3 @@
-// TODO: Break this apart lol.
 import type { NextPage } from 'next';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { ethers } from 'ethers';
