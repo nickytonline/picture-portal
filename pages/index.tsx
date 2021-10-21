@@ -10,6 +10,7 @@ import { MessageRequest } from '../@types/MessageRequest';
 import { MessageCard } from '@components/MessageCard';
 import { Miner } from '@components/Miner';
 import { Button } from '@components/Button';
+import { BaseProvider } from '@metamask/providers';
 
 function isMobile() {
   return /mobile|ipad|iphone|ios/i.test(navigator.userAgent.toLowerCase());
@@ -162,7 +163,7 @@ const Home: NextPage = () => {
     }
   }, []);
 
-  function getContract(ethereum: any) {
+  function getContract(ethereum: BaseProvider) {
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
     const wavePortalContract = new ethers.Contract(
@@ -228,7 +229,7 @@ const Home: NextPage = () => {
     }
   }
 
-  const checkIfWalletIsConnected = async (ethereum: any) => {
+  const checkIfWalletIsConnected = async (ethereum: BaseProvider) => {
     try {
       const [account] = await ethereum.request({ method: 'eth_accounts' });
 

@@ -1,4 +1,6 @@
-export declare global {
+import { BaseProvider } from '@metamask/providers';
+
+declare global {
   namespace JSX {
     interface IntrinsicElements {
       // Add the deprecated marquee tag as an intrinsic element to allow it to be used
@@ -10,6 +12,6 @@ export declare global {
   }
 
   interface Window {
-    ethereum: any; // TODO, type this out at some point.
+    ethereum: BaseProvider; // TODO, type this out at some point.
   }
 }
