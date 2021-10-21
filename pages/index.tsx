@@ -324,22 +324,24 @@ const Home: NextPage = () => {
               <Button onClick={connectWallet}>Connect Wallet</Button>
             )}
           </div>
-          <form>
-            <input
-              required={true}
-              type="text"
-              value={message}
-              placeholder="Message"
-              onChange={(e) => setMessage(e.target.value)}
-              sx={{ marginRight: '0.5rem' }}
-            />
-            <Button type="submit" onClick={requestArt}>
-              Send message
-            </Button>
-          </form>
+          {currentAccount && (
+            <form>
+              <input
+                required={true}
+                type="text"
+                value={message}
+                placeholder="Message"
+                onChange={(e) => setMessage(e.target.value)}
+                sx={{ marginRight: '0.5rem' }}
+              />
+              <Button type="submit" onClick={requestArt}>
+                Send message
+              </Button>
+            </form>
+          )}
         </div>
 
-        {artRequests.length > 0 && (
+        {currentAccount && artRequests.length > 0 && (
           <ul
             sx={{
               listStyle: 'none',
