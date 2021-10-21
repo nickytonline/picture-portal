@@ -13,7 +13,7 @@ import { Miner } from '@components/Miner';
 import { Button } from '@components/Button';
 
 function isMobile() {
-  return navigator.userAgent.includes('Mobile');
+  return /mobile|ipad|iphone|ios/i.test(navigator.userAgent.toLowerCase());
 }
 
 const contractAddress = '0xD21B19220949b18F55c8BbfA78728a696f1202dc';
