@@ -15,7 +15,11 @@
     "jsx": "preserve",
     "jsxImportSource": "theme-ui",
     "importHelpers": true,
-    "removeComments": true
+    "removeComments": true,
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["components/*"]
+    }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"],

@@ -1,13 +1,16 @@
 // TODO: Break this apart lol.
 import type { NextPage } from 'next';
-import WrappedImage from 'next/image';
-import { keyframes } from '@emotion/react';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { ethers } from 'ethers';
 import abi from '../utils/WavePortal.json';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getCatImageUrl } from '../utils/cats';
+import { EtherscanLink } from '@components/EtherscanLink';
+import { MessageRequest } from '../@types/MessageRequest';
+import { MessageCard } from '@components/MessageCard';
+import { Miner } from '@components/Miner';
+import { Button } from '@components/Button';
 
 function isMobile() {
   return navigator.userAgent.includes('Mobile');
@@ -16,15 +19,6 @@ function isMobile() {
 const contractAddress = '0xD21B19220949b18F55c8BbfA78728a696f1202dc';
 const contractABI = abi.abi;
 
-const fadeInfadeOut = keyframes`
-  from {
-  	opacity: 0;
-  }
-  to {
- 	opacity: 1;
-  }
-`;
-
 function getMissingMetamaskMessage() {
   if (isMobile()) {
     return `You are on a mobile device. To continue, open the Metamask application on your device and use the built-in browser to load the site.`;
@@ -32,124 +26,6 @@ function getMissingMetamaskMessage() {
     return 'The Metamask browser extension was not detected. Unable to continue. Ensure the extenson is installed and enabled.';
   }
 }
-
-const Image: typeof WrappedImage = ({
-  src,
-  alt,
-  width,
-  height,
-  layout,
-  ...props
-}) => {
-  const [imageUrl, setImageUrl] = useState(src);
-
-  return (
-    <WrappedImage
-      src={imageUrl}
-      alt={alt}
-      width={width}
-      height={height}
-      layout={layout}
-      {...props}
-      onError={(error) => {
-        setImageUrl('https://http.cat/404');
-      }}
-    />
-  );
-};
-
-interface MessageRequest {
-  address: string;
-  message: string;
-  timestamp: { toString(): string };
-  imageUrl: string;
-}
-
-const MessageCard: React.FC<{
-  messageRequest: MessageRequest;
-  ref?: React.Ref<HTMLDetailsElement>;
-  id?: string;
-}> = ({ messageRequest, ref, id }) => {
-  const timeStamp: string = messageRequest.timestamp.toString();
-  return (
-    <details ref={ref} id={id}>
-      <summary sx={{ userSelect: 'none', cursor: 'pointer' }}>
-        {messageRequest.message}
-      </summary>
-      <p>
-        Sender: <EtherscanLink address={messageRequest.address} />
-      </p>
-      <p>
-        Sent:{' '}
-        <time dateTime={timeStamp}>{new Date(timeStamp).toLocaleString()}</time>
-      </p>
-      <Image
-        src={messageRequest.imageUrl}
-        alt="Art for this request"
-        layout="fixed"
-        width="375"
-        height="300"
-      />
-    </details>
-  );
-};
-
-const EtherscanLink: React.FC<{ address: string }> = ({ address }) => {
-  return (
-    <a
-      sx={{ color: 'lime' }}
-      href={`https://rinkeby.etherscan.io/address/${address}`}
-      title={`${address} on etherscan.io`}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {address}
-    </a>
-  );
-};
-
-const Miner: React.FC<{ transactionId: string }> = ({ transactionId }) => {
-  return (
-    <>
-      <span
-        aria-hidden="true"
-        sx={{
-          opacity: 1,
-          '@media screen and (prefers-reduced-motion: no-preference)': {
-            animation: `${fadeInfadeOut} 2.5s ease-in-out infinite`,
-          },
-          marginRight: '0.75rem',
-        }}
-      >
-        💎
-      </span>
-      {`Mining transaction ${transactionId}`}
-    </>
-  );
-};
-
-// TODO: Improve this.
-const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({
-  children,
-  onClick,
-  type = 'button',
-}) => {
-  return (
-    <button
-      type={type}
-      sx={{
-        backgroundColor: 'accent',
-        color: '#fff',
-        borderRadius: '0.5rem',
-        border: 'none',
-        padding: '0.25rem 0.5rem',
-      }}
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
-};
 
 const Home: NextPage = () => {
   const [currentAccount, setCurrentAccount] = useState<string | null>(null);
