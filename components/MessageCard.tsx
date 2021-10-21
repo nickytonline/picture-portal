@@ -4,12 +4,12 @@ import { Image } from '@components/Image';
 
 export const MessageCard: React.FC<{
   messageRequest: MessageRequest;
-  ref?: React.Ref<HTMLDetailsElement>;
+  passedRef?: React.Ref<HTMLDetailsElement>;
   id?: string;
-}> = ({ messageRequest, ref, id }) => {
+}> = ({ messageRequest, passedRef, id }) => {
   const timeStamp: string = messageRequest.timestamp.toString();
   return (
-    <details ref={ref} id={id}>
+    <details ref={passedRef} id={id}>
       <summary sx={{ userSelect: 'none', cursor: 'pointer' }}>
         {messageRequest.message}
       </summary>

@@ -370,7 +370,7 @@ const Home: NextPage = () => {
               const otherProps =
                 index === items.length - 1
                   ? {
-                      ref: lastMessageRef,
+                      passedRef: lastMessageRef,
                       id: `message${index}`,
                     }
                   : {};
