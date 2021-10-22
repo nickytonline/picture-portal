@@ -47,6 +47,12 @@ function MyApp({ Component, pageProps }: AppProps) {
             margin: '1rem',
             maxWidth: '70ch',
             '@media screen and (max-width : 480px)': { maxWidth: '100vw' },
+            '*:focus': { outline: 'none' },
+            '*:focus-visible': {
+              outline: `2px solid`,
+              outlineColor: 'accent',
+              outlineOffset: '0.25rem',
+            },
           }}
         >
           <Component {...pageProps} />{' '}
