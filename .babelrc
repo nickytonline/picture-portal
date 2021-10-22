@@ -11,5 +11,15 @@
       }
     ]
   ],
-  "plugins": ["inline-react-svg"]
+  "plugins": [
+    "inline-react-svg",
+    [
+      "module-resolver",
+      {
+        "alias": {
+          "@assets": "./assets"
+        }
+      }
+    ]
+  ]
 }
