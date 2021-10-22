@@ -11,6 +11,7 @@ import { MessageCard } from '@components/MessageCard';
 import { Miner } from '@components/Miner';
 import { Button } from '@components/Button';
 import { BaseProvider } from '@metamask/providers';
+import { Maybe } from '@metamask/providers/dist/utils';
 
 function isMobile() {
   return /mobile|ipad|iphone|ios/i.test(navigator.userAgent.toLowerCase());
@@ -28,7 +29,7 @@ function getMissingMetamaskMessage() {
 }
 
 const Home: NextPage = () => {
-  const [currentAccount, setCurrentAccount] = useState<string | null>(null);
+  const [currentAccount, setCurrentAccount] = useState<Maybe<string>>(null);
   const [message, setMessage] = useState('');
   const [artRequests, setAllArtRequests] = useState<any[]>([]);
   const lastMessageRef = useRef<HTMLDetailsElement>(null);
@@ -231,9 +232,12 @@ const Home: NextPage = () => {
 
   const checkIfWalletIsConnected = async (ethereum: BaseProvider) => {
     try {
-      const [account] = await ethereum.request({ method: 'eth_accounts' });
+      const accounts = await ethereum.request<[string]>({
+        method: 'eth_accounts',
+      });
 
-      if (account) {
+      if (accounts?.length) {
+        const [account] = accounts;
         console.log('Found an authorized account:', account);
         setCurrentAccount(account);
       }
