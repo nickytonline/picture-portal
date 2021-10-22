@@ -23,7 +23,7 @@ export const MessageCard: React.FC<{
       <Image
         src={messageRequest.imageUrl}
         alt="Art for this request"
-        layout="fixed"
+        layout="responsive"
         width="375"
         height="300"
       />
