@@ -314,15 +314,20 @@ const Home: NextPage = () => {
             {currentAccount ? (
               <span
                 sx={{
+                  display: 'inline-flex',
                   background: '#000',
                   color: '#fff',
                   fontWeight: 500,
                   padding: '0.5rem',
                   borderRadius: '0.5rem',
                   marginRight: '0.5rem',
+                  '& a': {
+                    wordBreak: 'break-word',
+                  },
                 }}
               >
-                Account: <EtherscanLink address={currentAccount} />
+                <span sx={{ marginRight: '0.25rem' }}>Account:</span>{' '}
+                <EtherscanLink address={currentAccount} />
               </span>
             ) : (
               <Button onClick={connectWallet}>Connect Wallet</Button>
