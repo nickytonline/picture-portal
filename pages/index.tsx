@@ -12,6 +12,7 @@ import { Miner } from '@components/Miner';
 import { Button } from '@components/Button';
 import { BaseProvider } from '@metamask/providers';
 import { Maybe } from '@metamask/providers/dist/utils';
+import SendIcon from '@assets/icons/send.svg';
 
 function isMobile() {
   return /mobile|ipad|iphone|ios/i.test(navigator.userAgent.toLowerCase());
@@ -334,7 +335,7 @@ const Home: NextPage = () => {
             )}
           </div>
           {currentAccount && (
-            <form>
+            <form sx={{ display: 'flex' }}>
               <input
                 required={true}
                 type="text"
@@ -344,7 +345,7 @@ const Home: NextPage = () => {
                 sx={{ marginRight: '0.5rem' }}
               />
               <Button type="submit" onClick={requestArt}>
-                Send message
+                <SendIcon aria-label="Send message" />
               </Button>
             </form>
           )}
