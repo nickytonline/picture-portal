@@ -7,6 +7,8 @@ const updateEmotionAliases = (config) => ({
     ...config.resolve,
     alias: {
       ...config.resolve.alias,
+      '@components': path.resolve(__dirname, '../components'),
+      '@assets': path.resolve(__dirname, '../assets'),
       '@emotion/core': path.join(modulesDir, '@emotion/react'),
       '@emotion/styled': path.join(modulesDir, '@emotion/styled'),
       '@emotion/styled-base': path.join(modulesDir, '@emotion/styled'),
