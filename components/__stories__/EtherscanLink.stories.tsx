@@ -1,18 +1,19 @@
 import React from 'react';
 
 import { Meta } from '@storybook/react';
-import { EtherscanLink } from '../EtherscanLink';
+import { EtherscanLink } from '@components/EtherscanLink';
 
-export default {
+const meta: Meta = {
   title: 'Components/EtherscanLink',
   component: EtherscanLink,
   argTypes: {
     address: {
       control: { type: 'text' },
-      defaultValue: '123456ABCD',
+      defaultValue: '0xD02Be222253F4b21f0752299416D8E5CEBF57147',
     },
   },
-} as Meta;
+};
+export default meta;
 
 export const Default: React.VFC<{ address: string }> = ({ address }) => (
   <EtherscanLink address={address} />
