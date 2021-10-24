@@ -13,6 +13,7 @@ import { Button } from '@components/Button';
 import { BaseProvider } from '@metamask/providers';
 import { Maybe } from '@metamask/providers/dist/utils';
 import SendIcon from '@assets/icons/send.svg';
+import { RinkebyNetworkId } from 'utils/NetworkIds';
 
 function isMobile() {
   return /mobile|ipad|iphone|ios/i.test(navigator.userAgent.toLowerCase());
@@ -207,9 +208,20 @@ const Home: NextPage = () => {
         return;
       }
 
-      const accounts = await ethereum.request({
+      if (ethereum.networkVersion !== RinkebyNetworkId) {
+        toast.error('You are not on the Rinkeby network.');
+        return;
+      }
+
+      const accounts = await ethereum.request<[string]>({
         method: 'eth_requestAccounts',
       });
+
+      if (accounts?.length) {
+        const [account] = accounts;
+        console.log('Found an authorized account:', account);
+        setCurrentAccount(account);
+      }
 
       getArtRequests();
     } catch (error: any) {
@@ -256,6 +268,11 @@ const Home: NextPage = () => {
 
     if (!ethereum) {
       toast.error(getMissingMetamaskMessage());
+      return;
+    }
+
+    if (ethereum.networkVersion !== RinkebyNetworkId) {
+      toast.error('You are not on the Rinkeby network.');
       return;
     }
 
