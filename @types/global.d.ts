@@ -1,4 +1,5 @@
 import { BaseProvider } from '@metamask/providers';
+import { NetworkInfo } from '@types/NetworkInfo';
 
 declare global {
   namespace JSX {
@@ -12,6 +13,6 @@ declare global {
   }
 
   interface Window {
-    ethereum: BaseProvider; // TODO, type this out at some point.
+    ethereum: BaseProvider & NetworkInfo;
   }
 }
