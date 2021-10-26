@@ -1,11 +1,9 @@
 import { ThemeProvider } from '@theme-ui/theme-provider';
 import { defaultTheme } from '../themes/defaultTheme';
 import React from 'react';
-
-import '../styles/globals.css'; // so we have our global styles too
+import '../styles/globals.css';
 import * as NextImage from 'next/image';
 
-// https://dev.to/jonasmerlin/how-to-use-the-next-js-image-component-in-storybook-1415
 const OriginalNextImage = NextImage.default;
 
 Object.defineProperty(NextImage, 'default', {
